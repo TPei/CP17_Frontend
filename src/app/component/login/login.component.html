@@ -1,11 +1,22 @@
-<div>
-  <form class="form-group">
+<div class="row" id="comp_login">
+  <div class="col-lg-4 offset-lg-4 hidden-md hidden-xs hidden-sm">
     <div class="row">
-      <input type="text" class="form-control" placeholder="User Name">
+      <div class="offset-4">
+        <h3>Login</h3>
+      </div>
     </div>
+    <form class="form-group">
+      <div class="row">
+        <input type="text" class="form-control" placeholder="User Name">
+      </div>
+      <div class="row">
+        <button  class="btn btn-positive btn-block" (click)="onButtonClick" >Login</button>
+      </div>
+    </form>
     <div class="row">
-      <button class="btn btn-positive btn-block">Login</button>
+      <div class="col-6 pull-right">
+        <a href="#">Sign Up</a>
+      </div>
     </div>
-  </form>
-  <a>Sign Up</a>
+  </div>
 </div>

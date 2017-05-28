@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {Router} from '@angular/router';
+import { HttpModule,Http } from "@angular/http";
 
 @Component({
   selector: 'app-root',
@@ -9,11 +10,10 @@ import {Router} from '@angular/router';
 })
 export class AppComponent {
 
-  // constructor(router:Router){
-  //   // router.navigateByUrl('./component/login/login.component');
-  // }
+  constructor( private http:Http){
+    //  this.router.navigate(['/login']);
+  }
+  
 
-
-
-  title = 'app works!';
+  // title = 'app works!';
 }
