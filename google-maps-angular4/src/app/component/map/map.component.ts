@@ -34,8 +34,9 @@ export class MapComponent {
     console.log(`clicked the marker: ${label || index}`)
   }
   
-  mapClicked($event: MouseEvent) {
+  mapClicked($event: MouseEvent,i:number) {
     console.log($event);
+    console.log(i);
     // this.markers.push({
     //   lat: $event.coords.lat,
     //   lng: $event.coords.lng,
@@ -50,19 +51,19 @@ export class MapComponent {
   markers: marker[] = [
 	  {
 		  lat: 51.673858,
-		  lng: 23.815982,
+		  lng: 7.415982,
 		  label: 'A',
 		  draggable: true
 	  },
 	  {
 		  lat: 51.373858,
-		  lng: 23.215982,
+		  lng: 7.214382,
 		  label: 'B',
 		  draggable: false
 	  },
 	  {
-		  lat: 12.723858,
-		  lng: 25.895982,
+		  lat: 51.723858,
+		  lng: 7.895982,
 		  label: 'C',
 		  draggable: true
 	  }

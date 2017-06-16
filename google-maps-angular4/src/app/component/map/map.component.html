@@ -26,7 +26,12 @@
         </agm-info-window>
         
       </agm-marker>
-
+       <agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
+          [radius]="5000"
+          [fillColor]="'red'"
+          [circleDraggable]="false"
+          [editable]="false">
+      </agm-circle>
 
 
 </agm-map>
