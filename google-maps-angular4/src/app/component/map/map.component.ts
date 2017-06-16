@@ -53,19 +53,22 @@ export class MapComponent {
 		  lat: 51.673858,
 		  lng: 7.415982,
 		  label: 'A',
-		  draggable: true
+		  draggable: true,
+      iconUrl:"http://icons.iconarchive.com/icons/icons-land/vista-map-markers/64/Map-Marker-Ball-Pink-icon.png"
 	  },
 	  {
 		  lat: 51.373858,
 		  lng: 7.214382,
 		  label: 'B',
-		  draggable: false
+		  draggable: false,
+      iconUrl:"http://icons.iconarchive.com/icons/icons-land/vista-map-markers/64/Map-Marker-Ball-Pink-icon.png"
 	  },
 	  {
 		  lat: 51.723858,
 		  lng: 7.895982,
 		  label: 'C',
-		  draggable: true
+		  draggable: true,
+      iconUrl:"http://icons.iconarchive.com/icons/icons-land/vista-map-markers/64/Map-Marker-Ball-Pink-icon.png"
 	  }
   ];
 }
@@ -75,4 +78,5 @@ interface marker {
 	lng: number;
 	label?: string;
 	draggable: boolean;
+  iconUrl:string;
 }
