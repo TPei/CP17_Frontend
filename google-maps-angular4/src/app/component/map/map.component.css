@@ -1,7 +1,7 @@
 #map {
         height: 500px;
       }
-.sebm-google-map-container {
+.sebm-google-map-container,sebm-google-map,.agm-container  {
   height: 500px;
 }
 agm-map {
