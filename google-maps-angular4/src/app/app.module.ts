@@ -7,14 +7,16 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { MapComponent } from './component/map/map.component';
 import { AgmCoreModule } from '@agm/core';
-// import { MarkerClusterDirective } from './directive/marker-cluster.directive';
+import { SiteMapComponent } from './component/site-map/site-map.component';
+import { MarkerClusterDirective } from './directive/marker-cluster.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     // CommonModule,
     MapComponent,
-    // MarkerClusterDirective,
+    SiteMapComponent,
+    MarkerClusterDirective,
     
   ],
   imports: [
@@ -23,15 +25,15 @@ import { AgmCoreModule } from '@agm/core';
     HttpModule,
     // MarkerClusterDirective,
     // MapComponent,
-    // AgmCoreModule.forRoot({
-    //   apiKey: 'AIzaSyB3iOKgL5F3C5luaBh5Hhbj1pa2TCJqIhw'
-    // })
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyB3iOKgL5F3C5luaBh5Hhbj1pa2TCJqIhw'
+    })
   ],
   // exports: [
   //   MarkerClusterDirective
   // ],
   providers: [],
   bootstrap: [AppComponent],
-  // schemas:  [ CUSTOM_ELEMENTS_SCHEMA ]
+  schemas:  [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class AppModule { }
