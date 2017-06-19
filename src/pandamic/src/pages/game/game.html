@@ -6,6 +6,11 @@
     <ion-title>
       Game
     </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="addMarker()"><ion-icon name="add"></ion-icon>Add Marker</button>
+    </ion-buttons>  
   </ion-navbar>
 </ion-header>
-<ion-content padding id="page1"></ion-content>
+<ion-content padding id="page1">
+ <div #map id="map"></div> 
+</ion-content>

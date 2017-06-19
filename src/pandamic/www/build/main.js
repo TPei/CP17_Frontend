@@ -29894,11 +29894,47 @@ var GamePage = (function () {
     function GamePage(navCtrl) {
         this.navCtrl = navCtrl;
     }
+    GamePage.prototype.ionViewDidLoad = function () {
+        this.loadMap();
+    };
+    GamePage.prototype.loadMap = function () {
+        var latLng = new google.maps.LatLng(-34.9290, 138.6010);
+        var mapOptions = {
+            center: latLng,
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+    };
+    GamePage.prototype.addMarker = function () {
+        var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+        var marker = new google.maps.Marker({
+            map: this.map,
+            animation: google.maps.Animation.DROP,
+            position: this.map.getCenter(),
+            icon: image
+        });
+        var content = "<h4>Information!</h4>";
+        this.addInfoWindow(marker, content);
+    };
+    GamePage.prototype.addInfoWindow = function (marker, content) {
+        var _this = this;
+        var infoWindow = new google.maps.InfoWindow({
+            content: content
+        });
+        google.maps.event.addListener(marker, 'click', function () {
+            infoWindow.open(_this.map, marker);
+        });
+    };
     return GamePage;
 }());
+__decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_10" /* ViewChild */])('map'),
+    __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["s" /* ElementRef */])
+], GamePage.prototype, "mapElement", void 0);
 GamePage = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({
-        selector: 'page-game',template:/*ion-inline-start:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/game/game.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      Game\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding id="page1"></ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/game/game.html"*/
+        selector: 'page-game',template:/*ion-inline-start:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/game/game.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      Game\n    </ion-title>\n    <ion-buttons end>\n      <button ion-button (click)="addMarker()"><ion-icon name="add"></ion-icon>Add Marker</button>\n    </ion-buttons>  \n  </ion-navbar>\n</ion-header>\n<ion-content padding id="page1">\n <div #map id="map"></div> \n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/game/game.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */]])
 ], GamePage);
@@ -36183,7 +36219,7 @@ var AddPlayerPage = (function () {
 }());
 AddPlayerPage = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({
-        selector: 'page-add-player',template:/*ion-inline-start:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/add-player/add-player.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      Add Player\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding id="page14">\n  <form id="addPlayer-form5">\n    <ion-searchbar placeholder="Search Player" name="" id="addPlayer-search1"></ion-searchbar>\n  </form>\n  <ion-list id="addPlayer-list6">\n    <ion-item color="none" id="addPlayer-list-item10">\n      Player 1 (id : 00001)\n    </ion-item>\n    <ion-item color="none" id="addPlayer-list-item11">\n      Player 2 (id : 00002)\n    </ion-item>\n    <ion-item color="none" id="addPlayer-list-item12">\n      Player 3 (id : 00003)\n    </ion-item>\n  </ion-list>\n  <button id="addPlayer-button14" ion-button color="positive" block on-click="goToGame()">\n    Start Game\n  </button>\n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/add-player/add-player.html"*/
+        selector: 'page-add-player',template:/*ion-inline-start:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/add-player/add-player.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      Add Player\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding id="page14">\n  <form id="addPlayer-form5">\n    <ion-searchbar placeholder="Search Player" name="" id="addPlayer-search1"></ion-searchbar>\n  </form>\n  <ion-list id="addPlayer-list6">\n    <ion-item color="none" id="addPlayer-list-item10">\n      Player 1 (id : 00001)\n    </ion-item>\n    <ion-item color="none" id="addPlayer-list-item11">\n      Player 2 (id : 00002)\n    </ion-item>\n    <ion-item color="none" id="addPlayer-list-item12">\n      Player 3 (id : 00003)\n    </ion-item>\n  </ion-list>\n  <button id="addPlayer-button14" ion-button color="positive" block on-click="goToGame()">\n    Start Game\n  </button>\n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/add-player/add-player.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */]])
 ], AddPlayerPage);
@@ -36224,7 +36260,7 @@ var JoinGamePage = (function () {
 }());
 JoinGamePage = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({
-        selector: 'page-join-game',template:/*ion-inline-start:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/join-game/join-game.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      Join Game\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding id="page15">\n  <form id="joinGame-form6">\n    <ion-searchbar placeholder="Search for a Game" name="" id="joinGame-search2"></ion-searchbar>\n  </form>\n  <div class="spacer" style="width:300px;height:47px;" id="joinGame-spacer9"></div>\n  <ion-list id="joinGame-list7">\n    <ion-item color="none" on-click="goToGame()" id="joinGame-list-item15">\n      Game 1 (id: 00001)\n      <ion-icon name="add" item-right></ion-icon>\n    </ion-item>\n    <ion-item color="none" on-click="goToGame()" id="joinGame-list-item16">\n      Game 2 (id: 00002)\n      <ion-icon name="add" item-right></ion-icon>\n    </ion-item>\n    <ion-item color="none" on-click="goToGame()" id="joinGame-list-item17">\n      Game 3 (id: 00003)\n      <ion-icon name="add" item-right></ion-icon>\n    </ion-item>\n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/join-game/join-game.html"*/
+        selector: 'page-join-game',template:/*ion-inline-start:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/join-game/join-game.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      Join Game\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding id="page15">\n  <form id="joinGame-form6">\n    <ion-searchbar placeholder="Search for a Game" name="" id="joinGame-search2"></ion-searchbar>\n  </form>\n  <div class="spacer" style="width:300px;height:47px;" id="joinGame-spacer9"></div>\n  <ion-list id="joinGame-list7">\n    <ion-item color="none" on-click="goToGame()" id="joinGame-list-item15">\n      Game 1 (id: 00001)\n      <ion-icon name="add" item-right></ion-icon>\n    </ion-item>\n    <ion-item color="none" on-click="goToGame()" id="joinGame-list-item16">\n      Game 2 (id: 00002)\n      <ion-icon name="add" item-right></ion-icon>\n    </ion-item>\n    <ion-item color="none" on-click="goToGame()" id="joinGame-list-item17">\n      Game 3 (id: 00003)\n      <ion-icon name="add" item-right></ion-icon>\n    </ion-item>\n  </ion-list>\n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/join-game/join-game.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */]])
 ], JoinGamePage);
@@ -37821,7 +37857,7 @@ var CreateGamePage = (function () {
 }());
 CreateGamePage = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({
-        selector: 'page-create-game',template:/*ion-inline-start:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/create-game/create-game.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      Create Game\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding id="page13">\n  <form id="createGame-form4">\n    <div class="spacer" style="width:300px;height:120px;" id="createGame-spacer5"></div>\n  </form>\n  <button id="createGame-button12" ion-button color="positive" block on-click="goToAddPlayer()">\n    Create A New Game\n  </button>\n  <button id="createGame-button13" ion-button color="positive" block on-click="goToJoinGame()">\n    Join Other Game\n  </button>\n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/create-game/create-game.html"*/
+        selector: 'page-create-game',template:/*ion-inline-start:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/create-game/create-game.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      Create Game\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding id="page13">\n  <form id="createGame-form4">\n    <div class="spacer" style="width:300px;height:120px;" id="createGame-spacer5"></div>\n  </form>\n  <button id="createGame-button12" ion-button color="positive" block on-click="goToAddPlayer()">\n    Create A New Game\n  </button>\n  <button id="createGame-button13" ion-button color="positive" block on-click="goToJoinGame()">\n    Join Other Game\n  </button>\n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/create-game/create-game.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */]])
 ], CreateGamePage);
@@ -45036,7 +45072,7 @@ var LoginPage = LoginPage_1 = (function () {
 }());
 LoginPage = LoginPage_1 = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({
-        selector: 'page-login',template:/*ion-inline-start:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/login/login.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      Login\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding id="page10">\n  <div class="spacer" style="width:300px;height:47px;" id="login-spacer2"></div>\n  <form id="login-form2">\n    <ion-list id="login-list2">\n      <ion-item id="login-input1">\n        <ion-label>\n          User Name\n        </ion-label>\n        <ion-input type="text" placeholder=""></ion-input>\n      </ion-item>\n    </ion-list>\n    <div class="spacer" style="width:300px;height:47px;" id="login-spacer1"></div>\n    <button id="login-button7" ion-button color="stable" block on-click="goToCreateGame()">\n      Log in\n    </button>\n    <button id="login-button8" ion-button  color="stable" block on-click="goToSignUp()">\n       create new user\n    </button>\n  </form>\n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/login/login.html"*/
+        selector: 'page-login',template:/*ion-inline-start:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/login/login.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      Login\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding id="page10">\n  <div class="spacer" style="width:300px;height:47px;" id="login-spacer2"></div>\n  <form id="login-form2">\n    <ion-list id="login-list2">\n      <ion-item id="login-input1">\n        <ion-label>\n          User Name\n        </ion-label>\n        <ion-input type="text" placeholder=""></ion-input>\n      </ion-item>\n    </ion-list>\n    <div class="spacer" style="width:300px;height:47px;" id="login-spacer1"></div>\n    <button id="login-button7" ion-button color="stable" block on-click="goToCreateGame()">\n      Log in\n    </button>\n    <button id="login-button8" ion-button  color="stable" block on-click="goToSignUp()">\n       create new user\n    </button>\n  </form>\n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/login/login.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */]])
 ], LoginPage);
@@ -45111,7 +45147,7 @@ var SignUpPage = SignUpPage_1 = (function () {
 }());
 SignUpPage = SignUpPage_1 = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({
-        selector: 'page-sign-up',template:/*ion-inline-start:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/sign-up/sign-up.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      Sign Up\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding id="page12">\n  <form id="signUp-form3">\n    <div class="spacer" style="width:300px;height:47px;" id="signUp-spacer3"></div>\n    <ion-list id="signUp-list3">\n      <ion-item id="signUp-input3">\n        <ion-label>\n          Full Name\n        </ion-label>\n        <ion-input type="text" placeholder=""></ion-input>\n      </ion-item>\n      <ion-item id="signUp-input4">\n        <ion-label>\n         User Name\n        </ion-label>\n        <ion-input type="text" placeholder=""></ion-input>\n      </ion-item>\n      <ion-item id="signUp-input5">\n        <ion-label>\n          Email\n        </ion-label>\n        <ion-input type="email" placeholder=""></ion-input>\n      </ion-item>\n    </ion-list>\n    <div class="spacer" style="width:300px;height:47px;" id="signUp-spacer4"></div>\n    <button id="signUp-button9" ion-button color="stable" block on-click="goToLogin()">\n      Create\n    </button>\n  </form>\n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/sign-up/sign-up.html"*/
+        selector: 'page-sign-up',template:/*ion-inline-start:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/sign-up/sign-up.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      Sign Up\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding id="page12">\n  <form id="signUp-form3">\n    <div class="spacer" style="width:300px;height:47px;" id="signUp-spacer3"></div>\n    <ion-list id="signUp-list3">\n      <ion-item id="signUp-input3">\n        <ion-label>\n          Full Name\n        </ion-label>\n        <ion-input type="text" placeholder=""></ion-input>\n      </ion-item>\n      <ion-item id="signUp-input4">\n        <ion-label>\n         User Name\n        </ion-label>\n        <ion-input type="text" placeholder=""></ion-input>\n      </ion-item>\n      <ion-item id="signUp-input5">\n        <ion-label>\n          Email\n        </ion-label>\n        <ion-input type="email" placeholder=""></ion-input>\n      </ion-item>\n    </ion-list>\n    <div class="spacer" style="width:300px;height:47px;" id="signUp-spacer4"></div>\n    <button id="signUp-button9" ion-button color="stable" block on-click="goToLogin()">\n      Create\n    </button>\n  </form>\n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/sign-up/sign-up.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */]])
 ], SignUpPage);
@@ -56154,7 +56190,7 @@ var MainMenuPage = (function () {
 }());
 MainMenuPage = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({
-        selector: 'page-main-menu',template:/*ion-inline-start:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/main-menu/main-menu.html"*/'<!--<ion-header>\n  <ion-navbar>\n    <ion-title>\n      Main Menu\n    </ion-title>\n  </ion-navbar>\n</ion-header>-->\n<ion-content padding id="page7">\n  <div class="title_image">\n    <img src="assets/img/pandemic_img.png" style="width:100%;height:auto;margin-left:auto;margin-right:auto;" />\n  </div>\n  <button id="mainMenu-button2" ion-button color="positive" block on-click="goToLogin()">\n    New Game\n  </button>\n  <button id="mainMenu-button3" ion-button color="positive" block on-click="goToRuleBook()">\n    Rule Book\n  </button>\n  <button id="mainMenu-button4" ion-button color="positive" block on-click="goToOptions()">\n    Options\n  </button>\n  <button id="mainMenu-button5" ion-button color="positive" block>\n    Exit\n  </button>\n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/main-menu/main-menu.html"*/
+        selector: 'page-main-menu',template:/*ion-inline-start:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/main-menu/main-menu.html"*/'<!--<ion-header>\n  <ion-navbar>\n    <ion-title>\n      Main Menu\n    </ion-title>\n  </ion-navbar>\n</ion-header>-->\n<ion-content padding id="page7">\n  <div class="title_image">\n    <img src="assets/img/pandemic_img.png" style="width:100%;height:auto;margin-left:auto;margin-right:auto;" />\n  </div>\n  <button id="mainMenu-button2" ion-button color="positive" block on-click="goToLogin()">\n    New Game\n  </button>\n  <button id="mainMenu-button3" ion-button color="positive" block on-click="goToRuleBook()">\n    Rule Book\n  </button>\n  <button id="mainMenu-button4" ion-button color="positive" block on-click="goToOptions()">\n    Options\n  </button>\n  <button id="mainMenu-button5" ion-button color="positive" block>\n    Exit\n  </button>\n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/main-menu/main-menu.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */]])
 ], MainMenuPage);
@@ -56188,7 +56224,7 @@ var OptionsPage = (function () {
 }());
 OptionsPage = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({
-        selector: 'page-options',template:/*ion-inline-start:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/options/options.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      Options\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding id="page9">\n  <form id="options-form1">\n    <ion-item id="options-toggle1">\n      <ion-label>\n        Sound\n      </ion-label>\n      <ion-toggle color="positive" checked="false"></ion-toggle>\n    </ion-item>\n  </form>\n  <button id="options-button6" ion-button color="positive" block>\n    Reset\n  </button>\n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/options/options.html"*/
+        selector: 'page-options',template:/*ion-inline-start:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/options/options.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      Options\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding id="page9">\n  <form id="options-form1">\n    <ion-item id="options-toggle1">\n      <ion-label>\n        Sound\n      </ion-label>\n      <ion-toggle color="positive" checked="false"></ion-toggle>\n    </ion-item>\n  </form>\n  <button id="options-button6" ion-button color="positive" block>\n    Reset\n  </button>\n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/options/options.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */]])
 ], OptionsPage);
@@ -56222,7 +56258,7 @@ var RuleBookPage = (function () {
 }());
 RuleBookPage = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({
-        selector: 'page-rule-book',template:/*ion-inline-start:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/rule-book/rule-book.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      Rule Book\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding id="page8">\n  <div id="ruleBook-markdown1" class="show-list-numbers-and-dots">\n    <p style="color:#000000;">\n      we need to define\n      <strong>\n        RULES FOR THE GAME\n      </strong>\n      here\n    </p>\n  </div>\n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/pages/rule-book/rule-book.html"*/
+        selector: 'page-rule-book',template:/*ion-inline-start:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/rule-book/rule-book.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>\n      Rule Book\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding id="page8">\n  <div id="ruleBook-markdown1" class="show-list-numbers-and-dots">\n    <p style="color:#000000;">\n      we need to define\n      <strong>\n        RULES FOR THE GAME\n      </strong>\n      here\n    </p>\n  </div>\n</ion-content>'/*ion-inline-end:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/pages/rule-book/rule-book.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */]])
 ], RuleBookPage);
@@ -74815,6 +74851,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+//import { Geolocation } from '@ionic-native/geolocation';
 
 
 var AppModule = (function () {
@@ -75098,7 +75135,7 @@ __decorate([
     __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* Nav */])
 ], MyApp.prototype, "navCtrl", void 0);
 MyApp = __decorate([
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({template:/*ion-inline-start:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/app/app.html"*/'<ion-menu [content]="mainContent">\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>\n        More Info\n      </ion-title>\n    </ion-toolbar>\n  </ion-header>\n  <ion-content id="side-menu21">\n    <div id="moreInfo-markdown2" style="text-align:center;" class="show-list-numbers-and-dots">\n      <p style="color:#000000;">\n        Player Name : XYZ\n      </p>\n    </div>\n    <div id="moreInfo-markdown3" style="text-align:center;" class="show-list-numbers-and-dots">\n      <p style="color:#000000;">\n        Player Role\n      </p>\n    </div>\n    <div id="moreInfo-markdown4" style="text-align:center;" class="show-list-numbers-and-dots">\n      <p style="color:#000000;">\n        Moves Left : 5\n      </p>\n    </div>\n    <button id="moreInfo-button22" ion-button color="stable" block menuClose="" on-click="goToGame()">\n      Main Game\n    </button>\n    <button id="moreInfo-button18" ion-button color="stable" block>\n      Game Info\n    </button>\n    <button id="moreInfo-button19" ion-button color="stable" block>\n      Game Stats\n    </button>\n    <button id="moreInfo-button20" ion-button color="stable" block>\n      Outbreak Marker\n    </button>\n    <button id="moreInfo-button21" ion-button color="stable" block>\n      Infection Rate Marker\n    </button>\n  </ion-content>\n</ion-menu>\n\n<ion-nav #mainContent [root]="rootPage"></ion-nav>'/*ion-inline-end:"/Users/harpreet/Desktop/Pandamic/src/pandamic/src/app/app.html"*/
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_6" /* Component */])({template:/*ion-inline-start:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/app/app.html"*/'<ion-menu [content]="mainContent">\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>\n        More Info\n      </ion-title>\n    </ion-toolbar>\n  </ion-header>\n  <ion-content id="side-menu21">\n    <div id="moreInfo-markdown2" style="text-align:center;" class="show-list-numbers-and-dots">\n      <p style="color:#000000;">\n        Player Name : XYZ\n      </p>\n    </div>\n    <div id="moreInfo-markdown3" style="text-align:center;" class="show-list-numbers-and-dots">\n      <p style="color:#000000;">\n        Player Role\n      </p>\n    </div>\n    <div id="moreInfo-markdown4" style="text-align:center;" class="show-list-numbers-and-dots">\n      <p style="color:#000000;">\n        Moves Left : 5\n      </p>\n    </div>\n    <button id="moreInfo-button22" ion-button color="stable" block menuClose="" on-click="goToGame()">\n      Main Game\n    </button>\n    <button id="moreInfo-button18" ion-button color="stable" block>\n      Game Info\n    </button>\n    <button id="moreInfo-button19" ion-button color="stable" block>\n      Game Stats\n    </button>\n    <button id="moreInfo-button20" ion-button color="stable" block>\n      Outbreak Marker\n    </button>\n    <button id="moreInfo-button21" ion-button color="stable" block>\n      Infection Rate Marker\n    </button>\n  </ion-content>\n</ion-menu>\n\n<ion-nav #mainContent [root]="rootPage"></ion-nav>'/*ion-inline-end:"/Users/harpreet/Desktop/cloudporto/Pandamic/src/app/app.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]])
 ], MyApp);
