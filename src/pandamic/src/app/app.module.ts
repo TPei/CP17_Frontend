@@ -11,10 +11,14 @@ import { SignUpPage } from '../pages/sign-up/sign-up';
 import { CreateGamePage } from '../pages/create-game/create-game';
 import { AddPlayerPage } from '../pages/add-player/add-player';
 import { JoinGamePage } from '../pages/join-game/join-game';
-//import { Geolocation } from '@ionic-native/geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+<<<<<<< HEAD
 import { HttpModule, JsonpModule } from '@angular/http';
+=======
+import { RestApiProvider } from '../providers/rest-api/rest-api';
+import { HttpModule } from '@angular/http';
+>>>>>>> bb129a4a9b36e87c942ab7d99a0423d465dde6fa
 
 @NgModule({
   declarations: [
@@ -31,9 +35,14 @@ import { HttpModule, JsonpModule } from '@angular/http';
   ],
   imports: [
     BrowserModule,
+<<<<<<< HEAD
     IonicModule.forRoot(MyApp),
     HttpModule,
     JsonpModule
+=======
+    HttpModule,
+    IonicModule.forRoot(MyApp)
+>>>>>>> bb129a4a9b36e87c942ab7d99a0423d465dde6fa
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -51,7 +60,8 @@ import { HttpModule, JsonpModule } from '@angular/http';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    RestApiProvider
   ]
 })
 export class AppModule {}
