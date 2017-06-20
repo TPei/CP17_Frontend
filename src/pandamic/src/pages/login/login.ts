@@ -9,11 +9,15 @@ import { JoinGamePage } from '../join-game/join-game';
 
 @Component({
   selector: 'page-login',
-  templateUrl: 'login.html'
+  templateUrl: 'login.html',
+  // provider:['GameService']
 })
 export class LoginPage {
 
   constructor(public navCtrl: NavController) {
+
+
+
   }
   goToSignUp(params){
     if (!params) params = {};
