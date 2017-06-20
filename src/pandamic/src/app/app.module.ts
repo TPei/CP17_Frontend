@@ -11,9 +11,10 @@ import { SignUpPage } from '../pages/sign-up/sign-up';
 import { CreateGamePage } from '../pages/create-game/create-game';
 import { AddPlayerPage } from '../pages/add-player/add-player';
 import { JoinGamePage } from '../pages/join-game/join-game';
-//import { Geolocation } from '@ionic-native/geolocation';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { RestApiProvider } from '../providers/rest-api/rest-api';
+import { HttpModule } from '@angular/http';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   ],
   imports: [
     BrowserModule,
+    HttpModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -48,7 +50,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    RestApiProvider
   ]
 })
 export class AppModule {}

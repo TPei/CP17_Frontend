@@ -8,6 +8,7 @@ import { CreateGamePage } from '../create-game/create-game';
 import { AddPlayerPage } from '../add-player/add-player';
 import { GamePage } from '../game/game';
 import { JoinGamePage } from '../join-game/join-game';
+import { RestApiProvider } from '../../providers/rest-api/rest-api';
 
 
 @Component({
@@ -16,8 +17,17 @@ import { JoinGamePage } from '../join-game/join-game';
 })
 export class MainMenuPage {
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController , public restApiProvider : RestApiProvider) {
   }
+
+  game_get_data(){
+    this.restApiProvider.get_game_data().then((result)=> {
+      console.log("data revicied"+JSON.stringify(result));
+    }, (err) => {
+       console.log("data failed 1");
+    });
+  }
+
   goToRuleBook(params){
     if (!params) params = {};
     this.navCtrl.push(RuleBookPage);
