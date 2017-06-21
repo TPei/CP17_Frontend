@@ -13,12 +13,10 @@ import { AddPlayerPage } from '../pages/add-player/add-player';
 import { JoinGamePage } from '../pages/join-game/join-game';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-<<<<<<< HEAD
 import { HttpModule, JsonpModule } from '@angular/http';
-=======
 import { RestApiProvider } from '../providers/rest-api/rest-api';
-import { HttpModule } from '@angular/http';
->>>>>>> bb129a4a9b36e87c942ab7d99a0423d465dde6fa
+
+
 
 @NgModule({
   declarations: [
@@ -35,14 +33,11 @@ import { HttpModule } from '@angular/http';
   ],
   imports: [
     BrowserModule,
-<<<<<<< HEAD
+
     IonicModule.forRoot(MyApp),
     HttpModule,
     JsonpModule
-=======
-    HttpModule,
-    IonicModule.forRoot(MyApp)
->>>>>>> bb129a4a9b36e87c942ab7d99a0423d465dde6fa
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [
