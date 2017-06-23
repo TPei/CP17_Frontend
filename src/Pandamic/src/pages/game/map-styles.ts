@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class GlobalVariables {
     constructor() {
-
     }
 
  styles =
@@ -21,7 +20,7 @@ export class GlobalVariables {
             "elementType": "labels",
             "stylers": [
                 {
-                    "visibility": "off"
+                    "visibility": "on"
                 },
                 {
                     "saturation": "-100"
@@ -36,13 +35,13 @@ export class GlobalVariables {
                     "saturation": 36
                 },
                 {
-                    "color": "#000000"
+                    "color": "#ffffff"
                 },
                 {
                     "lightness": 40
                 },
                 {
-                    "visibility": "off"
+                    "visibility": "on"
                 }
             ]
         },
@@ -51,7 +50,7 @@ export class GlobalVariables {
             "elementType": "labels.text.stroke",
             "stylers": [
                 {
-                    "visibility": "off"
+                    "visibility": "on"
                 },
                 {
                     "color": "#000000"

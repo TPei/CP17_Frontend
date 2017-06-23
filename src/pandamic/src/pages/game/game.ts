@@ -3,12 +3,13 @@ import { NavController } from 'ionic-angular';
 //import { Geolocation } from '@ionic-native/geolocation';
 import { MapComponent } from '../../app/component/map/map.component';
 import { GlobalVariables }  from './map-styles';
+import { GameService } from '../../services/game.service';
 declare var google;
 
 @Component({
   selector: 'page-game',
   templateUrl: 'game.html',
-  providers:[GlobalVariables],
+  providers:[GlobalVariables,GameService],
 })
 export class GamePage {
 
@@ -16,12 +17,16 @@ export class GamePage {
   // map: any;
   styles:any;
 
-  constructor(public navCtrl: NavController,private globalVariables:GlobalVariables) {
+  constructor(
+  public navCtrl: NavController,
+  private globalVariables:GlobalVariables,
+  private gameService : GameService) {
+
     this.styles = globalVariables.styles;
   }
 
 
-    title: string = 'My first AGM project';
+    // title: string = 'My first AGM project';
   // lat: number = 51.678418;
   // lng: number = 7.809007;
   
@@ -30,7 +35,8 @@ export class GamePage {
 
 // }
   // google maps zoom level
-  zoom: number = 8;
+  minZoom: number = 10;
+  maxZoom: number = 15;
   
   // initial center position for the map
   lat: number = 51.673858;
@@ -43,6 +49,7 @@ export class GamePage {
   mapClicked($event: MouseEvent,i:number) {
     console.log($event);
     console.log(i);
+    console.log('map clicked');
     // this.markers.push({
     //   lat: $event.coords.lat,
     //   lng: $event.coords.lng,

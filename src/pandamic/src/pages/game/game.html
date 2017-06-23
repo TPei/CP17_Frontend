@@ -25,37 +25,46 @@
 <!--<appMarkerCluster [points]="points" ></appMarkerCluster>-->
   <!--<appMarkerCluster  ></appMarkerCluster>-->
 <!--</sebm-google-map>-->
-<agm-map [latitude]="lat" [longitude]="lng" [styles]="styles">
+<agm-map 
+
+[latitude]="lat" 
+[longitude]="lng" 
+[styles]="styles" 
+[minZoom]="minZoom" 
+[maxZoom]="maxZoom"
+[zoomControl] = "false" 
+[streetViewControl] = "false" 
+[rotateControl]="false"
+[fullscreenControl]= "false"
+
+>
   
   
   <!--<agm-marker [latitude]="lat" [longitude]="lng" [label]="M"></agm-marker>-->
-<agm-marker 
+  <agm-marker 
           *ngFor="let m of markers; let i = index"
-          (markerClick)="clickedMarker(m.label, i)"
+          (markerClick)="alert('dflkdsf')"
           [latitude]="m.lat"
           [longitude]="m.lng"
           [label]="m.label"
           [markerDraggable]="m.draggable"
           [iconUrl]="m.iconUrl"
-          (dragEnd)="markerDragEnd(m, $event)">
-          
+          (dragEnd)="markerDragEnd(m, $event)"
+          [title]="title" >
         <agm-info-window>
           <strong>InfoWindow content</strong>
         </agm-info-window>
         
       </agm-marker>
-       <agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
+       <!--<agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
           [radius]="5000"
           [fillColor]="'red'"
           [circleDraggable]="false"
           [editable]="false">
-      </agm-circle>
+      </agm-circle>-->
 
 
 </agm-map>
-
-
-
 
 
   <!--<app-map></app-map>-->
