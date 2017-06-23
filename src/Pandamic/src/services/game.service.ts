@@ -15,7 +15,7 @@ export class GameService {
     private _options: RequestOptions;
 
     constructor(private http: Http) {
-        console.log("game service starts");
+        // console.log("game service starts");
         this._headers = new Headers({ 'Content-Type': 'application/json' });
         
         this._options = new RequestOptions({ headers: this._headers });
