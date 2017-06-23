@@ -1,14 +1,25 @@
 .ios, .md {
 page-game {
 
-.scroll {
-        height: 100%
-      }
- 
-      #map {
-        width: 100%;
-        height: 100%;
-      }
 
 }
+
+}
+
+.scroll {
+        height: 100%
+}
+ 
+#map {
+        width: 100%;
+        height: 100%;
+}
+// #map {
+//         height: 500px;
+//       }
+.sebm-google-map-container,sebm-google-map,.agm-container  {
+  height: 500px;
+}
+agm-map {
+  height: 300px;
 }

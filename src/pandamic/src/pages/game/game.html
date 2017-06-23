@@ -12,5 +12,52 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page1">
- <div #map id="map"></div> 
+
+
+
+<!--<p>
+  map worksffsdfds!
+</p>-->
+<!--<h1>{{ title }}</h1>-->
+<!--<div id="map"></div>-->
+<!--<sebm-google-map [latitude]="lat" [longitude]="lng" [styles]="styles">-->
+  <!--<sebm-google-map-marker [latitude]="lat" [longitude]="lng" [label]="'M'"></sebm-google-map-marker>-->
+<!--<appMarkerCluster [points]="points" ></appMarkerCluster>-->
+  <!--<appMarkerCluster  ></appMarkerCluster>-->
+<!--</sebm-google-map>-->
+<agm-map [latitude]="lat" [longitude]="lng" [styles]="styles">
+  
+  
+  <!--<agm-marker [latitude]="lat" [longitude]="lng" [label]="M"></agm-marker>-->
+<agm-marker 
+          *ngFor="let m of markers; let i = index"
+          (markerClick)="clickedMarker(m.label, i)"
+          [latitude]="m.lat"
+          [longitude]="m.lng"
+          [label]="m.label"
+          [markerDraggable]="m.draggable"
+          [iconUrl]="m.iconUrl"
+          (dragEnd)="markerDragEnd(m, $event)">
+          
+        <agm-info-window>
+          <strong>InfoWindow content</strong>
+        </agm-info-window>
+        
+      </agm-marker>
+       <agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
+          [radius]="5000"
+          [fillColor]="'red'"
+          [circleDraggable]="false"
+          [editable]="false">
+      </agm-circle>
+
+
+</agm-map>
+
+
+
+
+
+  <!--<app-map></app-map>-->
+ <!--<div #map id="map"></div> -->
 </ion-content>

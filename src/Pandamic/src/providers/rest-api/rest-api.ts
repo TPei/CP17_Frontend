@@ -23,7 +23,7 @@ export class RestApiProvider {
     return new Promise((resolve, reject) => {
         this.http.get(apiUrl)
           .subscribe(res => {
-            resolve(res.json());
+            resolve(res.json());console.log(res);
           }, (err) => {
             reject(err);
           });

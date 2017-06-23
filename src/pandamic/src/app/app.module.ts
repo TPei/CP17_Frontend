@@ -1,4 +1,4 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
@@ -15,7 +15,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpModule, JsonpModule } from '@angular/http';
 import { RestApiProvider } from '../providers/rest-api/rest-api';
-
+import { MapComponent } from './component/map/map.component';
+import { AgmCoreModule } from '@agm/core';
 
 
 @NgModule({
@@ -29,11 +30,14 @@ import { RestApiProvider } from '../providers/rest-api/rest-api';
     SignUpPage,
     CreateGamePage,
     AddPlayerPage,
-    JoinGamePage
+    JoinGamePage,
+    MapComponent
   ],
   imports: [
     BrowserModule,
-
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyB3iOKgL5F3C5luaBh5Hhbj1pa2TCJqIhw'
+    }),
     IonicModule.forRoot(MyApp),
     HttpModule,
     JsonpModule
@@ -50,13 +54,14 @@ import { RestApiProvider } from '../providers/rest-api/rest-api';
     SignUpPage,
     CreateGamePage,
     AddPlayerPage,
-    JoinGamePage
+    JoinGamePage,
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     RestApiProvider
-  ]
+  ],
+  schemas:  [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class AppModule {}

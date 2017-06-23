@@ -9,15 +9,17 @@ import { AddPlayerPage } from '../add-player/add-player';
 import { GamePage } from '../game/game';
 import { JoinGamePage } from '../join-game/join-game';
 import { RestApiProvider } from '../../providers/rest-api/rest-api';
+import { GameService } from '../../services/game.service';
 
 
 @Component({
   selector: 'page-main-menu',
-  templateUrl: 'main-menu.html'
+  templateUrl: 'main-menu.html',
+  providers:[GameService]
 })
 export class MainMenuPage {
 
-  constructor(public navCtrl: NavController , public restApiProvider : RestApiProvider) {
+  constructor(public navCtrl: NavController , public restApiProvider : RestApiProvider, private gameService : GameService) {
   }
 
   game_get_data(){
@@ -36,6 +38,9 @@ export class MainMenuPage {
     this.navCtrl.push(OptionsPage);
   }goToLogin(params){
     if (!params) params = {};
+
+     console.log( this.gameService.gameRequest());
+
     this.navCtrl.push(LoginPage);
   }goToSignUp(params){
     if (!params) params = {};

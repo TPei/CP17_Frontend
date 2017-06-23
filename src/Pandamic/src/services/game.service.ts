@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, RequestOptions } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -9,12 +9,18 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class GameService {
     // private heroesUrl = 'api/heroes';  // URL to web API
-    private gameApiUrl:string = 'https://mysterious-sands-48154.herokuapp.com/';  // URL to web API
+    private _gameApiUrl: string = 'https://mysterious-sands-48154.herokuapp.com/';  // URL to web API
+    private _headers: Headers;
+    private _options: RequestOptions;
 
-    constructor(private http: Http) { }
+    constructor(private http: Http) {
+
+        this._headers = new Headers({ 'Content-Type': 'application/json' });
+        // this._options = new RequestOptions({ headers: this._headers });
+    }
 
     gameRequest() {
-        this.http.get(gameApiUrl).subscribe(response => console.log(response));
+        this.http.get(this._gameApiUrl).subscribe(response => console.log(response));
     }
 
     // private extractData(res: Response) {
