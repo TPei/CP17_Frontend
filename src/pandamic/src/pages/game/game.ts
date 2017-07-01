@@ -24,7 +24,6 @@ export class GamePage {
   ionViewDidLoad(){
     this.game_data= this.navParams.get('map');
     this.locations = this.game_data.locations;
-    console.log('game_data in game page'+JSON.stringify(this.locations));
     this.loadMap();
     this.addMarkers();
     
@@ -81,7 +80,7 @@ export class GamePage {
 
 //Add control and cube informations 
   addController(marker, content , color , cube_info){
-    console.log("cube data : "+ JSON.stringify(cube_info));
+  //  console.log("cube data : "+ JSON.stringify(cube_info));
       let infoWindow = new google.maps.InfoWindow({
         content: 'this is : '+content +'\n'+ 'color is : '+color
       });

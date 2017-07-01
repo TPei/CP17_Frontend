@@ -11,6 +11,10 @@ import { SignUpPage } from '../pages/sign-up/sign-up';
 import { CreateGamePage } from '../pages/create-game/create-game';
 import { AddPlayerPage } from '../pages/add-player/add-player';
 import { JoinGamePage } from '../pages/join-game/join-game';
+import { GameRulesPage } from '../pages/game-rules/game-rules';
+import { DiseasesPage } from '../pages/diseases/diseases';
+import { IndicatorsPage } from '../pages/indicators/indicators';
+import { PlayerPage } from '../pages/player/player';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { RestApiProvider } from '../providers/rest-api/rest-api';
@@ -27,7 +31,11 @@ import { HttpModule } from '@angular/http';
     SignUpPage,
     CreateGamePage,
     AddPlayerPage,
-    JoinGamePage
+    JoinGamePage,
+    GameRulesPage,
+    DiseasesPage,
+    IndicatorsPage,
+    PlayerPage
   ],
   imports: [
     BrowserModule,
@@ -45,7 +53,11 @@ import { HttpModule } from '@angular/http';
     SignUpPage,
     CreateGamePage,
     AddPlayerPage,
-    JoinGamePage
+    JoinGamePage,
+    GameRulesPage,
+    DiseasesPage,
+    IndicatorsPage,
+    PlayerPage
   ],
   providers: [
     StatusBar,

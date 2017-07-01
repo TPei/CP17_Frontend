@@ -15,6 +15,7 @@ import { RestApiProvider } from '../../providers/rest-api/rest-api';
   selector: 'page-main-menu',
   templateUrl: 'main-menu.html'
 })
+
 export class MainMenuPage {
 
   json_data : any ='';
@@ -29,7 +30,6 @@ export class MainMenuPage {
   game_get_data(){
     this.restApiProvider.get_game_data().then((result)=> {
       this.json_data = result;
-      console.log("data revicied"+JSON.stringify(result));
     }, (err) => {
        console.log("data failed 1");
     });
@@ -51,8 +51,6 @@ export class MainMenuPage {
   });
   alert.present();
 }
-
-
 
   goToRuleBook(params){
     if (!params) params = {};

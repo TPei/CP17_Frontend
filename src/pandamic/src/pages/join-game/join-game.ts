@@ -16,6 +16,7 @@ export class JoinGamePage {
   
   constructor(public navCtrl: NavController , public navParams : NavParams) {
   }
+
   goToGame(params){
     if (!params) params = {};
     this.navCtrl.push(GamePage ,this.game_data);
@@ -24,6 +25,5 @@ export class JoinGamePage {
   ionViewDidLoad(){
     this.game_data= this.navParams.get('game');
     this.game_id = this.game_data.game_id;
-    console.log('game data is join page :'+JSON.stringify(this.game_data));
   }
 }
