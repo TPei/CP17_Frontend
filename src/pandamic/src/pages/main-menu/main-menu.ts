@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, ToastController ,AlertController } from 'ionic-angular';
 import { RuleBookPage } from '../rule-book/rule-book';
 import { OptionsPage } from '../options/options';
 import { LoginPage } from '../login/login';
@@ -17,16 +17,42 @@ import { RestApiProvider } from '../../providers/rest-api/rest-api';
 })
 export class MainMenuPage {
 
-  constructor(public navCtrl: NavController , public restApiProvider : RestApiProvider) {
+  json_data : any ='';
+
+  constructor(public navCtrl: NavController ,
+   public restApiProvider : RestApiProvider ,
+   public toastCtrl: ToastController,
+   private alertCtrl: AlertController) {
+    this.game_get_data();
   }
 
   game_get_data(){
     this.restApiProvider.get_game_data().then((result)=> {
+      this.json_data = result;
       console.log("data revicied"+JSON.stringify(result));
     }, (err) => {
        console.log("data failed 1");
     });
   }
+
+   showToastMessage(info : string) {
+    let toast = this.toastCtrl.create({
+      message: info,
+      duration: 3000
+    });
+    toast.present();
+  }
+
+ showAlert() {
+  let alert = this.alertCtrl.create({
+    title: 'Low battery',
+    subTitle: '10% of battery remaining',
+    buttons: ['Dismiss']
+  });
+  alert.present();
+}
+
+
 
   goToRuleBook(params){
     if (!params) params = {};
@@ -36,7 +62,10 @@ export class MainMenuPage {
     this.navCtrl.push(OptionsPage);
   }goToLogin(params){
     if (!params) params = {};
-    this.navCtrl.push(LoginPage);
+   // this.navCtrl.push(LoginPage);
+    //  this.showToastMessage('Data is Not Availble Either check or internet or Server is not working');
+   //this.showAlert();
+  this.navCtrl.push(JoinGamePage, this.json_data);
   }goToSignUp(params){
     if (!params) params = {};
     this.navCtrl.push(SignUpPage);

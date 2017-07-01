@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar hideBackButton>
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -7,10 +7,15 @@
       Game
     </ion-title>
     <ion-buttons end>
+     <button ion-button>Default</button>
+      <button ion-button>Default</button>
+       <button ion-button>Default</button>
       <button ion-button (click)="addMarker()"><ion-icon name="add"></ion-icon>Add Marker</button>
     </ion-buttons>  
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page1">
- <div #map id="map"></div> 
+ <div #map id="map">
+ </div> 
+
 </ion-content>

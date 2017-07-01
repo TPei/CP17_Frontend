@@ -13,9 +13,9 @@ let apiUrl = 'assets/data/game.data.json';
 
 @Injectable()
 export class RestApiProvider {
-
+  
   constructor(public http: Http) {
-    console.log('Hello RestApiProvider Provider');
+      this.get_game_data();
   }
 
 
