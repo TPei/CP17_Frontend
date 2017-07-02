@@ -9,5 +9,20 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page13">
-dlaksdjalksdjaslkd
+
+ <ion-list *ngFor="let data of diseases" no-lines>
+
+ <ion-card>
+  <ion-card-header>
+   Color : {{ data.color }}     
+  </ion-card-header>
+  <ion-card-content>
+    Found : {{data.cure.found}}
+    Eradicated : {{data.cure.eradicated}}
+  </ion-card-content>
+
+</ion-card>
+
+  </ion-list>
+
 </ion-content>

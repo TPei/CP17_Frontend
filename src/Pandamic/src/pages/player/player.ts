@@ -7,14 +7,15 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class PlayerPage {
 
-  game_rule_data : any = ''; 
+  player_data : any = ''; 
+  tokens : any= '';
 
   constructor(public navCtrl: NavController , public navParams : NavParams) {
   }
   
 
   ionViewDidLoad(){
-    this.game_rule_data= this.navParams.get('game_rules');
-    console.log("game rul data :"+JSON.stringify(this.game_rule_data));
+    this.player_data= this.navParams.get('player');
+    this.tokens= this.player_data.tokens;
   }
 }

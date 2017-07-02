@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { GamePage } from '../pages/game/game';
 import { MainMenuPage } from '../pages/main-menu/main-menu';
 import { GameRulesPage } from '../pages/game-rules/game-rules';
 import { DiseasesPage } from '../pages/diseases/diseases';

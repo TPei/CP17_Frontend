@@ -16,6 +16,7 @@ export class GamePage {
   local: any;
   game_data :any ='';
   locations :any = [];
+  player_location_data : any = '';
 
 
   constructor(public navCtrl: NavController , public navParams : NavParams) {
@@ -23,9 +24,11 @@ export class GamePage {
 
   ionViewDidLoad(){
     this.game_data= this.navParams.get('map');
+    this.player_location_data= this.navParams.get('player');
     this.locations = this.game_data.locations;
     this.loadMap();
-    this.addMarkers();
+    // this.addMarkers();
+    this.addPlayerMarkers();
     
   }
 //Add the markers in the google map
@@ -38,6 +41,21 @@ export class GamePage {
       this.locations[_i].research_building,
       this.locations[_i].cubes);
     }
+  }
+
+  addPlayerMarkers(){
+     for (var _i = 0; _i < this.player_location_data.length; _i++) {
+    
+    let player_img = 'https://cdn.wikimg.net/strategywiki/images/3/33/Athena_player_sprite.png';
+      let marker  = new google.maps.Marker({
+        map: this.map,
+        animation: google.maps.Animation.BOUNCE,
+        position: new google.maps.LatLng(this.player_location_data[_i].at.latitude,
+                                          this.player_location_data[_i].at.longitude),
+        icon: player_img
+        });
+     this.add_player_informations(marker,this.player_location_data[_i].name);
+     }
   }
  
    //Load the map and initialized with a mid value
@@ -56,13 +74,13 @@ export class GamePage {
   }
 
   addMarker(lattitue :number , lognitute: number , alias:string , color: string , research_building: boolean , cube_info : string){
-  let image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';   
-  let image1 = 'http://yakimono.yunotsu.org/images/pin-small.png';
+  let location_img = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';   
+  let research_centre_img = 'http://yakimono.yunotsu.org/images/pin-small.png';
   let marker = new google.maps.Marker({
     map: this.map,
     animation: google.maps.Animation.DROP,
     position: new google.maps.LatLng(lattitue,lognitute),
-    icon: image
+    icon: location_img
   });
   
   let _alias = alias; 
@@ -72,7 +90,7 @@ export class GamePage {
       map: this.map,
       animation: google.maps.Animation.DROP,
       position: new google.maps.LatLng(lattitue,lognitute),
-      icon: image1
+      icon: research_centre_img
     });
   }    
   this.addController(marker, _alias , color ,cube_info);
@@ -91,6 +109,17 @@ export class GamePage {
   }
 
   add_Research_Controller(marker, content){
+    let infoWindow = new google.maps.InfoWindow({
+      content: content
+    });
+   
+    google.maps.event.addListener(marker, 'click', () => {
+      infoWindow.open(this.map, marker);
+    });
+ }
+
+
+ add_player_informations(marker, content){
     let infoWindow = new google.maps.InfoWindow({
       content: content
     });

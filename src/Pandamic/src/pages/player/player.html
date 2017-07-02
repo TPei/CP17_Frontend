@@ -9,5 +9,27 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page13">
-dlaksdjalksdjaslkd
+
+
+<ion-list *ngFor="let data of player_data" no-lines>
+ <ion-card>
+  <ion-card-header>
+   Name : {{ data.name }}     
+  </ion-card-header>
+  <ion-card-content>
+
+  //temp need to be looped for right now testing only
+	  {{data.tokens.disease_tokens[0].color}}
+	  {{data.tokens.disease_tokens[0].count}}
+  </ion-card-content>
+
+</ion-card>
+</ion-list>
+
+<!-- <ion-list *ngFor="let data1 of tokens no-lines>
+    color : {{data1.disease_tokens}}
+    count : {{data1.disease_tokens}}
+  </ion-list> -->
+
+
 </ion-content>
