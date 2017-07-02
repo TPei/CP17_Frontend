@@ -14,18 +14,18 @@
 <ion-content padding id="page1">
 
 
-
+<!--<div id="map"></div>-->
 <!--<p>
   map worksffsdfds!
 </p>-->
 <!--<h1>{{ title }}</h1>-->
-<!--<div id="map"></div>-->
+
 <!--<sebm-google-map [latitude]="lat" [longitude]="lng" [styles]="styles">-->
   <!--<sebm-google-map-marker [latitude]="lat" [longitude]="lng" [label]="'M'"></sebm-google-map-marker>-->
 <!--<appMarkerCluster [points]="points" ></appMarkerCluster>-->
   <!--<appMarkerCluster  ></appMarkerCluster>-->
 <!--</sebm-google-map>-->
-<agm-map 
+<!--<agm-map 
 
 [latitude]="lat" 
 [longitude]="lng" 
@@ -37,11 +37,11 @@
 [rotateControl]="false"
 [fullscreenControl]= "false"
 
->
+>-->
   
   
   <!--<agm-marker [latitude]="lat" [longitude]="lng" [label]="M"></agm-marker>-->
-  <agm-marker 
+  <!--<agm-marker 
           *ngFor="let m of markers; let i = index"
           (markerClick)="alert('dflkdsf')"
           [latitude]="m.lat"
@@ -55,7 +55,7 @@
           <strong>InfoWindow content</strong>
         </agm-info-window>
         
-      </agm-marker>
+      </agm-marker>-->
        <!--<agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
           [radius]="5000"
           [fillColor]="'red'"
@@ -64,9 +64,9 @@
       </agm-circle>-->
 
 
-</agm-map>
+<!--</agm-map>-->
 
 
   <!--<app-map></app-map>-->
- <!--<div #map id="map"></div> -->
+ <div #map id="map"></div> 
 </ion-content>

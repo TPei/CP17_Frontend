@@ -16,7 +16,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpModule, JsonpModule } from '@angular/http';
 import { RestApiProvider } from '../providers/rest-api/rest-api';
 import { MapComponent } from './component/map/map.component';
-import { AgmCoreModule } from '@agm/core';
+// import { AgmCoreModule } from '@agm/core';
 
 
 @NgModule({
@@ -35,9 +35,9 @@ import { AgmCoreModule } from '@agm/core';
   ],
   imports: [
     BrowserModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyB3iOKgL5F3C5luaBh5Hhbj1pa2TCJqIhw'
-    }),
+    // AgmCoreModule.forRoot({
+    //   apiKey: 'AIzaSyB3iOKgL5F3C5luaBh5Hhbj1pa2TCJqIhw'
+    // }),
     IonicModule.forRoot(MyApp),
     HttpModule,
     JsonpModule
