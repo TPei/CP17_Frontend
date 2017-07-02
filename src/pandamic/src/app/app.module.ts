@@ -1,4 +1,4 @@
-import { NgModule, ErrorHandler,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
@@ -11,12 +11,18 @@ import { SignUpPage } from '../pages/sign-up/sign-up';
 import { CreateGamePage } from '../pages/create-game/create-game';
 import { AddPlayerPage } from '../pages/add-player/add-player';
 import { JoinGamePage } from '../pages/join-game/join-game';
+import { GameRulesPage } from '../pages/game-rules/game-rules';
+import { DiseasesPage } from '../pages/diseases/diseases';
+import { IndicatorsPage } from '../pages/indicators/indicators';
+import { PlayerPage } from '../pages/player/player';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { HttpModule, JsonpModule } from '@angular/http';
 import { RestApiProvider } from '../providers/rest-api/rest-api';
+
 import { MapComponent } from './component/map/map.component';
 // import { AgmCoreModule } from '@agm/core';
+
+import { HttpModule } from '@angular/http';
 
 
 @NgModule({
@@ -31,17 +37,18 @@ import { MapComponent } from './component/map/map.component';
     CreateGamePage,
     AddPlayerPage,
     JoinGamePage,
-    MapComponent
+    GameRulesPage,
+    DiseasesPage,
+    IndicatorsPage,
+    PlayerPage
   ],
   imports: [
     BrowserModule,
     // AgmCoreModule.forRoot({
     //   apiKey: 'AIzaSyB3iOKgL5F3C5luaBh5Hhbj1pa2TCJqIhw'
     // }),
-    IonicModule.forRoot(MyApp),
     HttpModule,
-    JsonpModule
-
+    IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -55,13 +62,16 @@ import { MapComponent } from './component/map/map.component';
     CreateGamePage,
     AddPlayerPage,
     JoinGamePage,
+    GameRulesPage,
+    DiseasesPage,
+    IndicatorsPage,
+    PlayerPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     RestApiProvider
-  ],
-  schemas:  [ CUSTOM_ELEMENTS_SCHEMA ]
+  ]
 })
 export class AppModule {}

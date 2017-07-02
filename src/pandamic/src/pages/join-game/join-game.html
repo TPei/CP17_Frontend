@@ -14,16 +14,8 @@
   </form>
   <div class="spacer" style="width:300px;height:47px;" id="joinGame-spacer9"></div>
   <ion-list id="joinGame-list7">
-    <ion-item color="none" on-click="goToGame()" id="joinGame-list-item15">
-      Game 1 (id: 00001)
-      <ion-icon name="add" item-right></ion-icon>
-    </ion-item>
-    <ion-item color="none" on-click="goToGame()" id="joinGame-list-item16">
-      Game 2 (id: 00002)
-      <ion-icon name="add" item-right></ion-icon>
-    </ion-item>
-    <ion-item color="none" on-click="goToGame()" id="joinGame-list-item17">
-      Game 3 (id: 00003)
+    <ion-item color="none" on-click="goToGame()">
+      Game {{ game_id }} (id: {{ game_id }})
       <ion-icon name="add" item-right></ion-icon>
     </ion-item>
   </ion-list>

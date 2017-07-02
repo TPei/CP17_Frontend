@@ -1,17 +1,24 @@
 <ion-header>
-  <ion-navbar>
+  
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
+    <ion-navbar hideBackButton>
     <ion-title>
       Game
     </ion-title>
-    <ion-buttons end>
+<!--     <ion-buttons end>
+     <button ion-button>Default</button>
+      <button ion-button>Default</button>
+       <button ion-button>Default</button>
       <button ion-button (click)="addMarker()"><ion-icon name="add"></ion-icon>Add Marker</button>
-    </ion-buttons>  
+    </ion-buttons>   -->
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page1">
+ <div #map id="map">
+ </div> 
+
 
 
 <!--<div id="map"></div>-->
@@ -68,5 +75,6 @@
 
 
   <!--<app-map></app-map>-->
- <div #map id="map"></div> 
+
+
 </ion-content>

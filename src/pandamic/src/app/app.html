@@ -7,35 +7,23 @@
     </ion-toolbar>
   </ion-header>
   <ion-content id="side-menu21">
-    <div id="moreInfo-markdown2" style="text-align:center;" class="show-list-numbers-and-dots">
+<div id="moreInfo-markdown4" style="text-align:center;" class="show-list-numbers-and-dots">
       <p style="color:#000000;">
-        Player Name : XYZ
+        Game ID : {{game_id}}
       </p>
     </div>
-    <div id="moreInfo-markdown3" style="text-align:center;" class="show-list-numbers-and-dots">
-      <p style="color:#000000;">
-        Player Role
-      </p>
-    </div>
-    <div id="moreInfo-markdown4" style="text-align:center;" class="show-list-numbers-and-dots">
-      <p style="color:#000000;">
-        Moves Left : 5
-      </p>
-    </div>
-    <button id="moreInfo-button22" ion-button color="stable" block menuClose="" on-click="goToGame()">
-      Main Game
+
+    <button id="moreInfo-button18" ion-button color="stable" block on-click="gotogamerules()">
+      Game Rules
     </button>
-    <button id="moreInfo-button18" ion-button color="stable" block>
-      Game Info
+    <button id="moreInfo-button19" ion-button color="stable" block on-click="Diseases()">
+      Diseases
     </button>
-    <button id="moreInfo-button19" ion-button color="stable" block>
-      Game Stats
+    <button id="moreInfo-button20" ion-button color="stable" block on-click="Indicators()">
+      Indicators
     </button>
-    <button id="moreInfo-button20" ion-button color="stable" block>
-      Outbreak Marker
-    </button>
-    <button id="moreInfo-button21" ion-button color="stable" block>
-      Infection Rate Marker
+    <button id="moreInfo-button21" ion-button color="stable" block on-click="Player()">
+      Player
     </button>
   </ion-content>
 </ion-menu>
