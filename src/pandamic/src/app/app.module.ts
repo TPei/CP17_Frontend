@@ -18,6 +18,7 @@ import { PlayerPage } from '../pages/player/player';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { RestApiProvider } from '../providers/rest-api/rest-api';
+import { Geolocation } from '@ionic-native/geolocation';
 
 // import { MapComponent } from './component/map/map.component';
 // import { AgmCoreModule } from '@agm/core';
@@ -70,6 +71,7 @@ import { HttpModule } from '@angular/http';
   providers: [
     StatusBar,
     SplashScreen,
+    Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     RestApiProvider
   ]
