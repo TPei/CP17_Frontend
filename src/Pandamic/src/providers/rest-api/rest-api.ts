@@ -32,14 +32,14 @@ export class RestApiProvider {
     });
   }
 
-  post_game_data(input_data:any[],post_method) {
+  post_game_data(input_data:any,post_location) {
 
     // input = input_data.json();
 
     return new Promise((resolve, reject) => {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        this.http.post(apiUrl+"/game"+post_method , {Headers : headers,data: input_data})
+        this.http.post(apiUrl+"/game"+post_location ,input_data)
           .subscribe(res => {
             resolve(res.json());
           }, (err) => {

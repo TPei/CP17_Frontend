@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-
+import { RestApiProvider } from '../../providers/rest-api/rest-api';
 // import { NavController } from 'ionic-angular';
 //import { Geolocation } from '@ionic-native/geolocation';
 // import { MapComponent } from '../../app/component/map/map.component';
@@ -15,7 +15,7 @@ declare var google;
 @Component({
   selector: 'page-game',
   templateUrl: 'game.html',
-  providers: [GlobalVariables]
+  providers: [GlobalVariables,RestApiProvider]
 })
 
 export class GamePage {
@@ -48,7 +48,8 @@ export class GamePage {
     public navParams: NavParams,
     private globalVariables: GlobalVariables,
     private alertCtrl: AlertController,
-    public geolocation: Geolocation) {
+    public geolocation: Geolocation,
+    private restApi:RestApiProvider) {
     
 
     this.styles = globalVariables.styles;
@@ -220,7 +221,7 @@ export class GamePage {
         {
           text: 'Cure',
           handler: data => {
-            let user_id = 90;
+            let user_id = "1";
             this.cure(user_id, "red", 5);
           }
         },
@@ -243,8 +244,20 @@ export class GamePage {
     data.set("noofCuber",userId);
     data.set("userLat",this.currentCord[0].toString());
     data.set("userLong",this.currentCord[1].toString());
+    
 
-
+    let x= {
+      "type": "treat",
+      "location": {
+        "x": this.currentCord[0].toString(),
+        "y": this.currentCord[1].toString()
+      },
+      "player_id": userId,
+      "game_id": "1",
+      "disease": diseaseType
+    };
+    this.restApi.post_game_data(x,"/action");
+    console.log(data);
 
 
     // data["user_id"] = userId;
