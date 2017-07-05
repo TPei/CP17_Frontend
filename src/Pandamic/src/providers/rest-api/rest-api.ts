@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-
+import 'rxjs/add/operator/catch';
 /*
   Generated class for the RestApiProvider provider.
 
@@ -17,17 +17,19 @@ import 'rxjs/add/operator/map';
 export class RestApiProvider {
   
   constructor(public http: Http) {
-      this.get_game_data();
+      this.get_game_data("1");
   }
 
 
-  get_game_data() {
+  get_game_data(game_id) {
     return new Promise((resolve, reject) => {
-        this.http.get(apiUrl+"/game?id=1" )
+        this.http.get(apiUrl+"/game?id="+game_id )
           .subscribe(res => {
             resolve(res.json());
           }, (err) => {
             reject(err);
+          },()=>{
+            console.log("catch");
           });
     });
   }
@@ -44,6 +46,8 @@ export class RestApiProvider {
             resolve(res.json());
           }, (err) => {
             reject(err);
+          },()=>{
+            console.log("catch");
           });
     });
   }
