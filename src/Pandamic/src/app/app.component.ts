@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { MainMenuPage } from '../pages/main-menu/main-menu';
@@ -8,6 +7,7 @@ import { DiseasesPage } from '../pages/diseases/diseases';
 import { IndicatorsPage } from '../pages/indicators/indicators';
 import { PlayerPage } from '../pages/player/player';
 import { RestApiProvider } from '../providers/rest-api/rest-api';
+import { Platform, Nav, NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
 
 
 
@@ -23,7 +23,7 @@ export class MyApp {
   jsonReult : any = '';
   game_id : any = '';
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen ,private restApiProvider : RestApiProvider) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen ,private restApiProvider : RestApiProvider ,    private alertCtrl: AlertController) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -64,5 +64,41 @@ export class MyApp {
     if (!params) params = {};
     this.navCtrl.push(PlayerPage ,this.jsonReult.game);
   }
+
+  onClick1(params){
+    if (!params) params = {};
+       this.popPrompt();
+  }
+
+  onClick2(params){
+    if (!params) params = {};
+       this.popPrompt();
+  }
+
+  onClick3(params){
+    if (!params) params = {};
+       this.popPrompt();
+  }
+
+  onClick4(params){
+    if (!params) params = {};
+    this.popPrompt();
+  }
+
+   popPrompt() {
+    let alert = this.alertCtrl.create({
+      title: 'Actions',
+      buttons: [
+        
+        {
+          text: 'Cure',
+          handler: data => {
+          }
+        },
+      ]
+    });
+    alert.present();
+  }
+
 
 }

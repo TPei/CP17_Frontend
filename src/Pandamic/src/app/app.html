@@ -7,7 +7,7 @@
     </ion-toolbar>
   </ion-header>
   <ion-content id="side-menu21">
-<div id="moreInfo-markdown4" style="text-align:center;" class="show-list-numbers-and-dots">
+    <div id="moreInfo-markdown4" style="text-align:center;" class="show-list-numbers-and-dots">
       <p style="color:#000000;">
         Game ID : {{game_id}}
       </p>
@@ -25,6 +25,57 @@
     <button id="moreInfo-button21" ion-button color="stable" block on-click="Player()">
       Player
     </button>
+
+     <div id="moreInfo-markdown4" style="text-align:center;" class="show-list-numbers-and-dots">
+      <p  style="color:#000000;">
+        Select Card
+      </p>
+    </div>
+
+
+    <ion-grid>
+      <ion-row>
+        <ion-col col-6>
+              <ion-card (click) ="onClick1()">
+                  <img src="assets/img/card.png"/>
+              </ion-card>
+              <p align="center">
+                Card1 : 10/10
+                 </p>
+        </ion-col>
+
+         <ion-col col-6>
+              <ion-card (click) ="onClick2()">
+                  <img src="assets/img/card.png"/>
+              </ion-card>
+               <p align="center">
+                Card2 : 10/10
+                </p>
+        </ion-col>
+
+         <ion-col col-6>
+              <ion-card (click) ="onClick3()">
+                  <img src="assets/img/card.png"/>
+              </ion-card>
+               <p align="center">
+                Card3 : 10/10
+                 </p>
+        </ion-col>
+
+         <ion-col col-6>
+              <ion-card (click) ="onClick4()">
+                  <img src="assets/img/card.png"/>
+              </ion-card>
+               <p align="center"> 
+                Card4 : 10/10
+                 </p>
+        </ion-col>
+       
+
+  </ion-row>
+</ion-grid>
+
+    
   </ion-content>
 </ion-menu>
 
