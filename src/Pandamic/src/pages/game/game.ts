@@ -22,7 +22,7 @@ export class GamePage {
   location: any;
   currentCord: number[] = [];
   // geolocation: any = "";
-
+  dieaseMarkerDistance: number = 170;
   @ViewChild('map') mapElement: ElementRef;
 
 
@@ -41,7 +41,7 @@ export class GamePage {
   game_data: any = '';
   locations: any = [];
   player_location_data: any = '';
-
+  isMove:boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -94,6 +94,7 @@ export class GamePage {
   }
   //Add the disease markers in the google map
   addMarkers() {
+    console.log(this.locations);
     for (var _i = 0; _i < this.locations.length; _i++) {
       this.addMarker(this.locations[_i].latitude,
         this.locations[_i].longitude,
@@ -123,20 +124,7 @@ export class GamePage {
   }
 
 
-  addDiseaseMarkers() {
-    for (var _i = 0; _i < this.player_location_data.length; _i++) {
-
-      let player_img = 'https://cdn.wikimg.net/strategywiki/images/3/33/Athena_player_sprite.png';
-      let marker = new google.maps.Marker({
-        map: this.map,
-        animation: google.maps.Animation.DROP,
-        position: new google.maps.LatLng(this.player_location_data[_i].at.latitude,
-          this.player_location_data[_i].at.longitude),
-        icon: player_img
-      });
-      this.add_player_informations(marker, this.player_location_data[_i].name);
-    }
-  }
+  
 
 
   //Load the map and initialized with a mid value
@@ -145,11 +133,12 @@ export class GamePage {
     //location 6 has to be changed to Mid count of location length
     let latLng = new google.maps.LatLng(this.locations[6].latitude,
       this.locations[6].longitude);
+      
     let mapOptions = {
       center: latLng,
       zoom: 14,
-      minZoom:  10,
-      maxZoom:  15,
+      // minZoom:  10,
+      // maxZoom:  15,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       styles: this.styles,
       zoomControl: false,
@@ -160,22 +149,16 @@ export class GamePage {
   }
 
 
-  addMarker(lattitue: number, lognitute: number, alias: string, color: string, research_building: boolean, cube_info: string) {
-    // let location_img = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
-    let location_img: string = "";
-    if(color=="red"){
-      location_img = '/assets/img/Map-Marker-Ball-Pink-icon.png';
-    } 
-    else if (color=="black"){
-       location_img = '/assets/img/MapMarker_Ball__Black.png';
-    }
-     
+  addMarker(lattitue: number, longitute: number, alias: string, color: string, research_building: boolean, cube_info: string) {
+    //  let location_img = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+     let location_img: string = "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/map-marker-icon.png";
+    
     
     let research_centre_img = '/assets/img/office-building-icon.png';
     let marker = new google.maps.Marker({
       map: this.map,
       animation: google.maps.Animation.DROP,
-      position: new google.maps.LatLng(lattitue, lognitute),
+      position: new google.maps.LatLng(lattitue, longitute),
       icon: location_img
     });
 
@@ -185,12 +168,93 @@ export class GamePage {
       new google.maps.Marker({
         map: this.map,
         animation: google.maps.Animation.DROP,
-        position: new google.maps.LatLng(lattitue, lognitute),
+        position: new google.maps.LatLng(lattitue, longitute),
         icon: research_centre_img
       });
     }
+
+    this.addDiseaseMarkers(lattitue, longitute,cube_info);
+
+
     this.addController(marker, _alias, color, cube_info);
   }
+
+  addDiseaseMarkers(lat,lng,cubeInfo) {
+    console.log("disease marker");
+
+    var decPart_lat = (lat+"").split(".");
+    let disease_lat = 0;
+
+    var decPart_lng = (lng+"").split(".");
+    let disease_lng = 0;
+
+    let img:string = "";
+    console.log(cubeInfo);
+    cubeInfo.forEach(element => { console.log(element.color);
+    
+    if(element.color == "red"){
+     img = "/assets/img/Map-Marker-Ball-Pink-icon.png";
+     disease_lat = Number(decPart_lat[0] + "." + Number(Number(decPart_lat[1]) + this.dieaseMarkerDistance));
+     disease_lng = Number(decPart_lng[0] + "." + Number(Number(decPart_lng[1]) + this.dieaseMarkerDistance));
+    }  
+    else if (element.color == "blue"){
+       img = '/assets/img/Map-Marker-Ball-Azure.png';
+       disease_lat = Number(decPart_lat[0] + "." + Number(Number(decPart_lat[1]) + this.dieaseMarkerDistance));
+       disease_lng = Number(decPart_lng[0] + "." + Number(Number(decPart_lng[1]) - this.dieaseMarkerDistance));
+    }
+    else if (element.color=="yellow"){
+       img = '/assets/img/MapMarker_Ball__Black.png';
+       disease_lat = Number(decPart_lat[0] + "." + Number(Number(decPart_lat[1]) - this.dieaseMarkerDistance));
+       disease_lng = Number(decPart_lng[0] + "." + Number(Number(decPart_lng[1]) + this.dieaseMarkerDistance));
+    }
+    else if (element.color == "green"){
+       img = "/assets/img/Map-Marker-Ball-Chartreuse.png";
+       disease_lat = Number(decPart_lat[0] + "." + Number(Number(decPart_lat[1]) - this.dieaseMarkerDistance));
+       disease_lng = Number(decPart_lng[0] + "." + Number(Number(decPart_lng[1]) - this.dieaseMarkerDistance));
+    }
+      console.log("disease marker2");
+    // let player_img = 'https://cdn.wikimg.net/strategywiki/images/3/33/Athena_player_sprite.png';
+      let marker = new google.maps.Marker({
+        map: this.map,
+        // animation: google.maps.Animation.DROP,
+        position: new google.maps.LatLng(disease_lat,disease_lng),
+        icon: img
+      });
+
+       let infoWindow = new google.maps.InfoWindow({
+         content: 'cube count: ' + element.count
+      });
+
+    google.maps.event.addListener(marker, 'click', () => {
+      
+      infoWindow.open(this.map, marker);
+      // if(!this.isMove){
+      // this.presentPrompt();
+      // }else {
+      //   this.movePrompt(marker);
+      // }
+    });
+
+    });
+    
+     
+    
+
+
+    // for (var _i = 0; _i < this.player_location_data.length; _i++) {
+
+    //   let player_img = 'https://cdn.wikimg.net/strategywiki/images/3/33/Athena_player_sprite.png';
+    //   let marker = new google.maps.Marker({
+    //     map: this.map,
+    //     animation: google.maps.Animation.DROP,
+    //     position: new google.maps.LatLng(this.player_location_data[_i].at.latitude,
+    //       this.player_location_data[_i].at.longitude),
+    //     icon: player_img
+    //   });
+    //   this.add_player_informations(marker, this.player_location_data[_i].name);
+    // }
+  }
+
 
   //Add control and cube informations 
   addController(marker, content, color, cube_info) {
@@ -209,6 +273,9 @@ export class GamePage {
       }
     });
   }
+
+
+
 
   add_Research_Controller(marker, content) {
     let infoWindow = new google.maps.InfoWindow({
@@ -240,7 +307,7 @@ export class GamePage {
 
   presentPrompt() {
     let alert = this.alertCtrl.create({
-      title: 'Button Open',
+      title: 'Actions',
       // let bt_text = "";
       // if(player_role == ){
 
@@ -251,16 +318,24 @@ export class GamePage {
         {
           text: 'Cure',
           handler: data => {
-            let user_id = "1";
+            let user_id = "Tom";
             this.cure(user_id, "red", 5);
           }
         },
         {
           text: 'Move',
           handler: data => {
-            let user_id = "1";
-            this.currentCord
+            let user_id = "Tom";
+            
             this.move(user_id, this.currentCord);
+          }
+        },
+        {
+          text: 'Build Research Center',
+          handler: data => {
+            let user_id = "Tom";
+            
+            // this.build_researh_center(user_id, this.currentCord);
           }
         },
         {
@@ -314,14 +389,18 @@ export class GamePage {
 
 
 
+
+
+
+
   cure(userId, diseaseType, noofCubes) {
 
-    let data:  Map<string, string> = new Map<string, string>();
-    data.set("user_id",userId);
-    data.set("disease_type",userId);
-    data.set("noofCuber",userId);
-    data.set("userLat",this.currentCord[0].toString());
-    data.set("userLong",this.currentCord[1].toString());
+    // let data:  Map<string, string> = new Map<string, string>();
+    // data.set("user_id",userId);
+    // data.set("disease_type",userId);
+    // data.set("noofCuber",userId);
+    // data.set("userLat",this.currentCord[0].toString());
+    // data.set("userLong",this.currentCord[1].toString());
     
     let x= {
       "type": "treat",
@@ -330,7 +409,7 @@ export class GamePage {
         "y": this.currentCord[1].toString()
       },
       "player_id": userId,
-      "game_id": "1",
+      "game_id": 1,
       "disease": diseaseType
     };
     let response = this.restApi.post_game_data(x,"/action");
@@ -376,7 +455,10 @@ export class GamePage {
     // });
 
   }
-  isMove:boolean = false;
+
+
+ 
+
   move(user_id, locationCords){
     if(!this.isMove){
     this.isMove = true;
@@ -392,7 +474,7 @@ export class GamePage {
       "game_id": "1",
       "disease": ""
     };
-    this.restApi.post_game_data(x,"/action");
+    this.restApi.put_game_data(x,"/action");
     this.isMove = false;
      this.ionViewDidLoad();
   }
