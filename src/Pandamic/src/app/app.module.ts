@@ -19,11 +19,13 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { RestApiProvider } from '../providers/rest-api/rest-api';
 import { Geolocation } from '@ionic-native/geolocation';
+import { IonicStorageModule } from '@ionic/storage';
 
 // import { MapComponent } from './component/map/map.component';
 // import { AgmCoreModule } from '@agm/core';
 
 import { HttpModule } from '@angular/http';
+import { LocalstorageProvider } from '../providers/localstorage/localstorage';
 
 
 @NgModule({
@@ -49,7 +51,8 @@ import { HttpModule } from '@angular/http';
     //   apiKey: 'AIzaSyB3iOKgL5F3C5luaBh5Hhbj1pa2TCJqIhw'
     // }),
     HttpModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -73,7 +76,8 @@ import { HttpModule } from '@angular/http';
     SplashScreen,
     Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    RestApiProvider
+    RestApiProvider,
+    LocalstorageProvider
   ]
 })
 export class AppModule {}
