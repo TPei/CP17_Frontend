@@ -9,6 +9,8 @@ import { AddPlayerPage } from '../add-player/add-player';
 import { GamePage } from '../game/game';
 import { JoinGamePage } from '../join-game/join-game';
 import { RestApiProvider } from '../../providers/rest-api/rest-api';
+import { LocalstorageProvider } from '../../providers/localstorage/localstorage';
+
 
 
 @Component({
@@ -23,8 +25,12 @@ export class MainMenuPage {
   constructor(public navCtrl: NavController ,
    public restApiProvider : RestApiProvider ,
    public toastCtrl: ToastController,
-   private alertCtrl: AlertController) {
+   private alertCtrl: AlertController,
+   private localStr : LocalstorageProvider) {
     this.game_get_data();
+
+    //For Local Storage testing
+    // this.localStr.save_data("test","Testing");
   }
 
   game_get_data(){
@@ -55,6 +61,11 @@ export class MainMenuPage {
   goToRuleBook(params){
     if (!params) params = {};
     this.navCtrl.push(RuleBookPage);
+
+      //For Local Storage testing
+    this.localStr.get_data("test").then((val) => {
+        console.log("Value is :"+val);
+    });
   }goToOptions(params){
     if (!params) params = {};
     this.navCtrl.push(OptionsPage);
