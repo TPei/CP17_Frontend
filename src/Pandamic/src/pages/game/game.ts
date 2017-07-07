@@ -42,6 +42,11 @@ export class GamePage {
   locations: any = [];
   player_location_data: any = '';
   isMove:boolean = false;
+  edges : any = [];
+  from_location_latitude :any =[];
+  from_location_longitude :any =[]; 
+  to_location_latitude :any =[];
+  to_location_longitude :any =[];  
 
   constructor(
     public navCtrl: NavController,
@@ -62,6 +67,7 @@ export class GamePage {
     this.game_data = this.navParams.get('map');
     this.player_location_data = this.navParams.get('player');
     this.locations = this.game_data.locations;
+    this.edges = this.game_data.edges;
 
     this.geolocation.getCurrentPosition().then((position) => {
 
@@ -90,6 +96,8 @@ export class GamePage {
     this.loadMap();
     this.addMarkers();
     this.addPlayerMarkers();
+    this.fetchMarkers();
+    this.connectMarkers();
 
   }
   //Add the disease markers in the google map
@@ -101,7 +109,7 @@ export class GamePage {
         this.locations[_i].alias,
         this.locations[_i].color,
         this.locations[_i].research_building,
-        this.locations[_i].cubes);
+        this.locations[_i].cubes);        
     }
   }
 
@@ -178,6 +186,57 @@ export class GamePage {
 
     this.addController(marker, _alias, color, cube_info);
   }
+
+
+  fetchMarkers(){
+
+    for (var _i = 0; _i < this.edges.length; _i++) {
+       for (var _j = 0; _j < this.locations.length; _j++) {         
+           if(this.locations[_j].id==this.edges[_i].from){
+               this.from_location_latitude[_i] = this.locations[_j].latitude;
+               this.from_location_longitude[_i] = this.locations[_j].longitude;
+           }
+        }
+    }
+
+    for (var _i = 0; _i < this.edges.length; _i++) {
+       for (var _j = 0; _j < this.locations.length; _j++) {         
+           if(this.locations[_j].id==this.edges[_i].to){
+               this.to_location_latitude[_i] = this.locations[_j].latitude;
+               this.to_location_longitude[_i] = this.locations[_j].longitude;
+           }
+        }
+    }
+ }
+
+  connectMarkers(){
+    for (var _i = 0; _i < this.from_location_latitude.length; _i++) {
+       this.showMarkers(this.from_location_latitude[_i],
+        this.from_location_longitude[_i],
+        this.to_location_latitude[_i],
+        this.to_location_longitude[_i]);
+    }
+  }
+
+
+   showMarkers(startLat,startLong,endLat, endLong){
+
+      var flightPlanCoordinates = [
+          {lat: startLat, lng: startLong},
+          {lat: endLat, lng: endLong}
+        ];
+        var flightPath = new google.maps.Polyline({
+          path: flightPlanCoordinates,
+          geodesic: true,
+          strokeColor: '#00ccbe',
+          strokeOpacity: 5,
+          strokeWeight: 3
+        });
+
+        flightPath.setMap(this.map);
+
+   }
+
 
   addDiseaseMarkers(lat,lng,cubeInfo) {
     console.log("disease marker");
