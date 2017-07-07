@@ -60,7 +60,7 @@ export class MainMenuPage {
     this.navCtrl.push(OptionsPage);
   }goToLogin(params){
     if (!params) params = {};
-   // this.navCtrl.push(LoginPage);
+    // this.navCtrl.push(LoginPage);
     //  this.showToastMessage('Data is Not Availble Either check or internet or Server is not working');
    //this.showAlert();
   this.navCtrl.push(JoinGamePage, this.json_data);
