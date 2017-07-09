@@ -8,6 +8,9 @@ import { GlobalVariables } from './map-styles';
 // import { GameService } from '../../providers/restgame.service';
 import { NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
+import { LocalstorageProvider } from '../../providers/localstorage/localstorage';
+
+
 // import 'rxjs/add/operator/toPromise';
 
 declare var google;
@@ -46,7 +49,8 @@ export class GamePage {
   from_location_latitude :any =[];
   from_location_longitude :any =[]; 
   to_location_latitude :any =[];
-  to_location_longitude :any =[];  
+  to_location_longitude :any =[]; 
+  default_player_name : any = ''; 
 
   constructor(
     public navCtrl: NavController,
@@ -55,10 +59,14 @@ export class GamePage {
     public toastCtrl: ToastController,
     private alertCtrl: AlertController,
     public geolocation: Geolocation,
-    private restApi:RestApiProvider) {
+    private restApi:RestApiProvider,
+    private localStr: LocalstorageProvider) {
     
 
     this.styles = globalVariables.styles;
+    this.localStr.get_data("player_id1").then((val) => {
+      this.default_player_name = val;
+    });
 
   }
 
@@ -68,9 +76,7 @@ export class GamePage {
     this.player_location_data = this.navParams.get('player');
     this.locations = this.game_data.locations;
     this.edges = this.game_data.edges;
-
     this.geolocation.getCurrentPosition().then((position) => {
-
       this.currentCord[0] = position.coords.latitude;
       this.currentCord[1] = position.coords.longitude;
       // this.location = position;
@@ -85,21 +91,32 @@ export class GamePage {
       // }
  
       // this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
- 
-    }, (err) => {
-      console.log(err);
-    })
-
-
-
 
     this.loadMap();
     this.addMarkers();
     this.addPlayerMarkers();
     this.fetchMarkers();
     this.connectMarkers();
+ 
+    }, (err) => {
+      console.log(err);
+    })
 
   }
+
+  refresh_game_data(){
+    console.log("Refresh the game");
+    this.restApi.get_game_data("1").then((result)=> {
+      let game: any = result['game'];
+      this.game_data = game.map;
+      this.player_location_data = game.player;
+      this.locations = this.game_data.locations;    
+       }, (err) => {
+       console.log("data failed 1");
+    });
+  }
+
+
   //Add the disease markers in the google map
   addMarkers() {
     console.log(this.locations);
@@ -120,7 +137,18 @@ export class GamePage {
     for (var _i = 0; _i < this.player_location_data.length; _i++) {
 
       let player_img = '/assets/img/Doctor-icon.png';
+      let default_player = '/assets/img/default_player.png';
+      if(this.player_location_data[_i].name == this.default_player_name ){
       let marker = new google.maps.Marker({
+        map: this.map,
+        animation: google.maps.Animation.DROP,
+        position: new google.maps.LatLng(this.player_location_data[_i].at.latitude,
+          this.player_location_data[_i].at.longitude),
+        icon: default_player
+      });
+      this.add_player_informations(marker, this.player_location_data[_i].name);
+      }else{
+        let marker = new google.maps.Marker({
         map: this.map,
         animation: google.maps.Animation.DROP,
         position: new google.maps.LatLng(this.player_location_data[_i].at.latitude,
@@ -128,9 +156,26 @@ export class GamePage {
         icon: player_img
       });
       this.add_player_informations(marker, this.player_location_data[_i].name);
+      }
     }
   }
 
+
+//  updatePlayerPosition(){
+//       this.geolocation.getCurrentPosition().then((position) => {
+//       this.currentCord[0] = position.coords.latitude;
+//       this.currentCord[1] = position.coords.longitude;
+//        }, (err) => {
+//       console.log(err);
+//     })
+
+
+//   latitude = parseInt(document.getElementById('latitude').value, 10);
+//   longtitude = parseInt(document.getElementById('longtitude').value, 10);
+//   myLatlng = new google.maps.LatLng(latitude, longtitude);
+//   marker.setPosition(myLatlng);
+//   map.setCenter(myLatlng);
+// }
 
   
 
@@ -139,12 +184,12 @@ export class GamePage {
   loadMap() {
     console.log(this.location);
     //location 6 has to be changed to Mid count of location length
-    let latLng = new google.maps.LatLng(this.locations[6].latitude,
-      this.locations[6].longitude);
+    let latLng = new google.maps.LatLng(this.currentCord[0],
+      this.currentCord[1]);
       
     let mapOptions = {
       center: latLng,
-      zoom: 14,
+      zoom: 15,
       // minZoom:  10,
       // maxZoom:  15,
       mapTypeId: google.maps.MapTypeId.ROADMAP,

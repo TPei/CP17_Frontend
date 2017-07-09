@@ -20,6 +20,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { RestApiProvider } from '../providers/rest-api/rest-api';
 import { Geolocation } from '@ionic-native/geolocation';
 import { IonicStorageModule } from '@ionic/storage';
+import { Device } from '@ionic-native/device';
 
 // import { MapComponent } from './component/map/map.component';
 // import { AgmCoreModule } from '@agm/core';
@@ -75,6 +76,7 @@ import { LocalstorageProvider } from '../providers/localstorage/localstorage';
     StatusBar,
     SplashScreen,
     Geolocation,
+    Device,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     RestApiProvider,
     LocalstorageProvider

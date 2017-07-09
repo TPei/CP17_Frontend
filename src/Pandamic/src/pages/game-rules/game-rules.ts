@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AddPlayerPage } from '../add-player/add-player';
-import { GamePage } from '../game/game';
 import { JoinGamePage } from '../join-game/join-game';
 
 
