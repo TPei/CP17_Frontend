@@ -6,6 +6,7 @@ export class GlobalVariables {
 
  styles =
     [
+        
         {
             "featureType": "all",
             "elementType": "all",
