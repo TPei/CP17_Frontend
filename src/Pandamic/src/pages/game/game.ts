@@ -52,6 +52,8 @@ export class GamePage {
   to_location_latitude :any =[];
   to_location_longitude :any =[]; 
   default_player_name : any = ''; 
+  public Token_Data : any  = '';
+
   game_id:any= "1";
   constructor(
     public navCtrl: NavController,
@@ -98,6 +100,7 @@ export class GamePage {
     this.addPlayerMarkers();
     this.fetchMarkers();
     this.connectMarkers();
+    this.TokenCount();
  
     }, (err) => {
       console.log(err);
@@ -130,6 +133,21 @@ export class GamePage {
         this.locations[_i].cubes);        
     }
   }
+
+
+  TokenCount(){
+      for (var _i = 0; _i < this.player_location_data.length; _i++) {
+        if(this.player_location_data[_i].name == this.default_player_name ){
+          this.Token_Data = " TOKENS =>  ";
+        for (var _k = 0; _k < this.player_location_data[_i].tokens.disease_tokens.length; _k++) {
+           this.Token_Data=  this.Token_Data + " "+this.player_location_data[_i].tokens.disease_tokens[_k].color + " : "
+                               + this.player_location_data[_i].tokens.disease_tokens[_k].count;
+                               console.log("Coloer : "+this.player_location_data[_i].tokens.disease_tokens[_k].color );
+            }
+          }
+        }
+  }
+
 
 
 
@@ -217,8 +235,9 @@ export class GamePage {
     });
 
     let _alias = alias;
-    console.log(Number(Number(lattitue)+50));
-    if (research_building) { console.log("dsfdsf");
+    // console.log(Number(Number(lattitue)+50));
+    if (research_building) { 
+      // console.log("dsfdsf");
 
       let arr = this.modifiedLatLng(lattitue,longitute);
 
@@ -396,7 +415,7 @@ export class GamePage {
     });
 
     google.maps.event.addListener(marker, 'click', () => {
-      console.log("1");
+      // console.log("1");
       infoWindow.open(this.map, marker);
       if(!this.isMove){
       this.presentPrompt(marker);
@@ -415,7 +434,7 @@ export class GamePage {
     });
 
     google.maps.event.addListener(marker, 'click', () => {
-      console.log("2");
+      // console.log("2");
       infoWindow.open(this.map, marker);
       this.presentPrompt(marker);
       // 
@@ -430,7 +449,7 @@ export class GamePage {
     });
 
     google.maps.event.addListener(marker, 'click', () => {
-      console.log("3");
+      // console.log("3");
       infoWindow.open(this.map, marker);
       this.presentPrompt(marker);
 
@@ -540,7 +559,7 @@ export class GamePage {
           text: 'Treat',
           handler: data => {
             let user_id = this.userId;
-            console.log(marker['customInfo']);
+            // console.log(marker['customInfo']);
             this.cure_treat("treat",user_id, marker['customInfo'], 1);
           }
         },
@@ -584,7 +603,7 @@ export class GamePage {
     //   "disease": diseaseType
     // };
     let response = this.restApi.post_game_data(this.dataForCureMoveBuild(type,userId,this.currentCord,this.game_id,diseaseType),"/action");
-     console.log(response);
+     // console.log(response);
      this.ionViewDidLoad();
 
 
@@ -655,8 +674,8 @@ export class GamePage {
    this.currentCord.push(position.coords.longitude);
   //  this.currentCord = cord;
   setTimeout(handler=>{
-    console.log(this.currentCord[0]);
-    console.log(this.currentCord[1]);
+    //console.log(this.currentCord[0]);
+    //console.log(this.currentCord[1]);
   },300);
     
 }
