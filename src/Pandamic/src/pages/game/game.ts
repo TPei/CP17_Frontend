@@ -50,14 +50,9 @@ export class GamePage {
   from_location_latitude :any =[];
   from_location_longitude :any =[]; 
   to_location_latitude :any =[];
-<<<<<<< HEAD
   to_location_longitude :any =[]; 
   default_player_name : any = ''; 
-
-=======
-  to_location_longitude :any =[];  
   game_id:any= "1";
->>>>>>> a94b84fa0539c1040bb2b6fa39102a76663baa9f
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,

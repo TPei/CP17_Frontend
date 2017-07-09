@@ -21,18 +21,14 @@ import { Geolocation } from '@ionic-native/geolocation';
 export class MainMenuPage {
 
   json_data : any ='';
-<<<<<<< HEAD
   public player_current_location_lat : any = "";
   public player_current_location_long : any = "";
 
-=======
  game_id:any = 1;
->>>>>>> a94b84fa0539c1040bb2b6fa39102a76663baa9f
   constructor(public navCtrl: NavController ,
    public restApiProvider : RestApiProvider ,
    public toastCtrl: ToastController,
    private alertCtrl: AlertController,
-<<<<<<< HEAD
    private localStr : LocalstorageProvider,
    private geolocation : Geolocation) {
 
@@ -98,11 +94,8 @@ export class MainMenuPage {
     }, (err) => {
       console.log(err);
     })
-=======
-   private localStr : LocalstorageProvider) {
-     
+   
     this.game_get_data();
->>>>>>> a94b84fa0539c1040bb2b6fa39102a76663baa9f
 
   }
 
