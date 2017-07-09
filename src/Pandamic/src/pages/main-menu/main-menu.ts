@@ -21,12 +21,13 @@ import { LocalstorageProvider } from '../../providers/localstorage/localstorage'
 export class MainMenuPage {
 
   json_data : any ='';
-
+ game_id:any = 1;
   constructor(public navCtrl: NavController ,
    public restApiProvider : RestApiProvider ,
    public toastCtrl: ToastController,
    private alertCtrl: AlertController,
    private localStr : LocalstorageProvider) {
+     
     this.game_get_data();
 
     //For Local Storage testing
@@ -34,7 +35,7 @@ export class MainMenuPage {
   }
 
   game_get_data(){
-    this.restApiProvider.get_game_data("1").then((result)=> {
+    this.restApiProvider.get_game_data(this.game_id).then((result)=> {
       this.json_data = result;
     }, (err) => {
        console.log("data failed 1");

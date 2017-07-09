@@ -48,7 +48,7 @@ export class GamePage {
   from_location_longitude :any =[]; 
   to_location_latitude :any =[];
   to_location_longitude :any =[];  
-
+  game_id:any= "1";
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -117,7 +117,7 @@ export class GamePage {
 
 
   addPlayerMarkers() {
-    this.restApi.get_game_data("1");
+    this.restApi.get_game_data(this.game_id);
     for (var _i = 0; _i < this.player_location_data.length; _i++) {
 
       let player_img = '/assets/img/Doctor-icon.png';
@@ -163,23 +163,27 @@ export class GamePage {
      let location_img: string = "/assets/img/map-marker-icon.png";
     
     
-    let research_centre_img = '/assets/img/office-building-icon.png';
+    let research_centre_img = "/assets/img/office-building-icon.png";
     let marker = new google.maps.Marker({
       map: this.map,
-      animation: google.maps.Animation.DROP,
+      // animation: google.maps.Animation.DROP,
       position: new google.maps.LatLng(lattitue, longitute),
       icon: location_img
     });
 
     let _alias = alias;
+    console.log(Number(Number(lattitue)+50));
+    if (research_building) { console.log("dsfdsf");
 
-    if (research_building) {
-      new google.maps.Marker({
+      let arr = this.modifiedLatLng(lattitue,longitute);
+
+       marker = new google.maps.Marker({
         map: this.map,
-        animation: google.maps.Animation.DROP,
-        position: new google.maps.LatLng(Number(lattitue)+50, Number(longitute)+50),
+        // animation: google.maps.Animation.DROP,
+        position: new google.maps.LatLng(arr[0], arr[1]),
         icon: research_centre_img
       });
+      // this.add_Research_Controller(research_marker,"Research Center");
     }
 
     this.addDiseaseMarkers(lattitue, longitute,cube_info);
@@ -187,6 +191,24 @@ export class GamePage {
 
     this.addController(marker, _alias, color, cube_info);
   }
+
+
+  modifiedLatLng(lat,lng) : any[]{
+    var decPart_lat = (lat+"").split(".");
+    let disease_lat = 0;
+
+    var decPart_lng = (lng+"").split(".");
+    let disease_lng = 0;
+    this.dieaseMarkerDistance = 300;
+    let coor : any[] = [];
+
+    coor.push(Number(decPart_lat[0] + "." + Number(Number(decPart_lat[1]) + this.dieaseMarkerDistance)));
+    coor.push(Number(decPart_lng[0] + "." + Number(Number(decPart_lng[1]) + this.dieaseMarkerDistance)));
+    return coor;
+  }
+
+
+
 
 
   fetchMarkers(){
@@ -265,7 +287,8 @@ export class GamePage {
        disease_lng = Number(decPart_lng[0] + "." + Number(Number(decPart_lng[1]) - this.dieaseMarkerDistance));
     }
     else if (element.color=="yellow"){
-       img = '/assets/img/MapMarker_Ball__Black.png';
+      //  img = '/assets/img/MapMarker_Ball__Black.png';
+       img = '/assets/img/MapMarker_Ball_Black2.png';
        disease_lat = Number(decPart_lat[0] + "." + Number(Number(decPart_lat[1]) - this.dieaseMarkerDistance));
        disease_lng = Number(decPart_lng[0] + "." + Number(Number(decPart_lng[1]) + this.dieaseMarkerDistance));
     }
@@ -515,7 +538,7 @@ export class GamePage {
     //   "game_id": 1,
     //   "disease": diseaseType
     // };
-    let response = this.restApi.post_game_data(this.dataForCureMoveBuild(type,userId,this.currentCord,1,diseaseType),"/action");
+    let response = this.restApi.post_game_data(this.dataForCureMoveBuild(type,userId,this.currentCord,this.game_id,diseaseType),"/action");
      console.log(response);
      this.ionViewDidLoad();
 
@@ -569,14 +592,14 @@ export class GamePage {
     this.showToastMessage ("select destination");
   } else {
 
-    this.restApi.put_game_data(this.dataForCureMoveBuild("move",user_id,this.currentCord,1,""),"/action");
+    this.restApi.put_game_data(this.dataForCureMoveBuild("move",user_id,this.currentCord,this.game_id,""),"/action");
     this.isMove = false;
      this.ionViewDidLoad();
   }
   }
 
   build(user_id,building_type) {
-    this.restApi.post_game_data(this.dataForCureMoveBuild("build_research",user_id,this.currentCord,1,""),"/action");
+    this.restApi.post_game_data(this.dataForCureMoveBuild("build_research",user_id,this.currentCord,this.game_id,""),"/action");
     this.isMove = false;
     this.ionViewDidLoad();
   }
