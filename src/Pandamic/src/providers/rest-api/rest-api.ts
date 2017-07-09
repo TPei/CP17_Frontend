@@ -9,7 +9,7 @@ import 'rxjs/add/operator/catch';
   for more info on providers and Angular DI.
 */
 
-  // let apiUrl = 'assets/data/game.data.json';
+  // let apiUrl = 'assets/dummy.json';
 // let apiUrl = 'https://mysterious-sands-48154.herokuapp.com';
 let apiUrl = 'http://sample-env.mucpcmwpvj.eu-central-1.elasticbeanstalk.com';
 
@@ -71,6 +71,22 @@ export class RestApiProvider {
     });
   }
 
+  post_player_data(input_data:any) {
+
+    return new Promise((resolve, reject) => {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        this.http.post(apiUrl+"/game/player",input_data)
+          .subscribe(res => {
+            resolve(res.json());
+          }, (err) => {
+            reject(err);
+             console.log("err"+err);
+          },()=>{
+            console.log("catch on post player");
+          });
+    });
+  }
 
 
 }
