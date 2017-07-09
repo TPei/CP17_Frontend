@@ -21,13 +21,18 @@ import { Geolocation } from '@ionic-native/geolocation';
 export class MainMenuPage {
 
   json_data : any ='';
+<<<<<<< HEAD
   public player_current_location_lat : any = "";
   public player_current_location_long : any = "";
 
+=======
+ game_id:any = 1;
+>>>>>>> a94b84fa0539c1040bb2b6fa39102a76663baa9f
   constructor(public navCtrl: NavController ,
    public restApiProvider : RestApiProvider ,
    public toastCtrl: ToastController,
    private alertCtrl: AlertController,
+<<<<<<< HEAD
    private localStr : LocalstorageProvider,
    private geolocation : Geolocation) {
 
@@ -93,11 +98,16 @@ export class MainMenuPage {
     }, (err) => {
       console.log(err);
     })
+=======
+   private localStr : LocalstorageProvider) {
+     
+    this.game_get_data();
+>>>>>>> a94b84fa0539c1040bb2b6fa39102a76663baa9f
 
   }
 
   game_get_data(){
-    this.restApiProvider.get_game_data("1").then((result)=> {
+    this.restApiProvider.get_game_data(this.game_id).then((result)=> {
       this.json_data = result;
     }, (err) => {
        console.log("data failed 1");
@@ -130,7 +140,7 @@ export class MainMenuPage {
     this.navCtrl.push(OptionsPage);
   }goToLogin(params){
     if (!params) params = {};
-   // this.navCtrl.push(LoginPage);
+    // this.navCtrl.push(LoginPage);
     //  this.showToastMessage('Data is Not Availble Either check or internet or Server is not working');
    //this.showAlert();
   this.navCtrl.push(JoinGamePage, this.json_data);
