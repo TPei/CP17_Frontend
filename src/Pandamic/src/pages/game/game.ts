@@ -79,21 +79,25 @@ export class GamePage {
     this.player_location_data = this.navParams.get('player');
     this.locations = this.game_data.locations;
     this.edges = this.game_data.edges;
-    this.geolocation.getCurrentPosition().then((position) => {
-      this.currentCord[0] = position.coords.latitude;
-      this.currentCord[1] = position.coords.longitude;
-      // this.location = position;
-      // let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    //  console.log('init');
-    //   console.log(this.currentCord[0]);
-    //   console.log( this.currentCord[1]);
-      // let mapOptions = {
-      //   center: latLng,
-      //   zoom: 15,
-      //   mapTypeId: google.maps.MapTypeId.ROADMAP
-      // }
- 
-      // this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+
+
+    // this.geolocation.getCurrentPosition().then((position) => {
+
+    //   this.currentCord[0] = position.coords.latitude;
+    //   this.currentCord[1] = position.coords.longitude;
+
+    // }, (err) => {
+    //   console.log(err);
+    // })
+
+
+    this.geolocation.watchPosition().subscribe((position) => {
+
+               this.currentCord[0] = position.coords.latitude;
+               this.currentCord[1] = position.coords.longitude;
+    });
+
+
 
     this.loadMap();
     this.addMarkers();
@@ -102,9 +106,7 @@ export class GamePage {
     this.connectMarkers();
     this.TokenCount();
  
-    }, (err) => {
-      console.log(err);
-    })
+  
 
   }
 
@@ -218,7 +220,50 @@ export class GamePage {
     }
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
+    
+
+
   }
+
+currentPositionMarker:any = "";
+   watchCurrentPosition() {
+
+          this.geolocation.watchPosition().subscribe((position) => {
+
+              this.setMarkerPosition(
+                        this.currentPositionMarker,
+                        position
+                    );
+
+
+              // this.currentCord[0] = position.coords.latitude;
+              // this.currentCord[1] = position.coords.longitude;
+          });
+
+
+
+
+            // var positionTimer = navigator.geolocation.watchPosition(
+            //     function (position) {
+            //         this.setMarkerPosition(
+            //             this.currentPositionMarker,
+            //             position
+            //         );
+            //     });
+        }
+ 
+         setMarkerPosition(marker, position) {
+            marker.setPosition(
+                new google.maps.LatLng(
+                    position.coords.latitude,
+                    position.coords.longitude)
+            );
+        }
+
+
+
+
+
 
 
   addMarker(lattitue: number, longitute: number, alias: string, color: string, research_building: boolean, cube_info: string) {
