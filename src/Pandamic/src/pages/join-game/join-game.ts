@@ -7,8 +7,6 @@ import { GamePage } from '../game/game';
   templateUrl: 'join-game.html'
 })
 
-
-
 export class JoinGamePage {
 
   game_data :any ='';

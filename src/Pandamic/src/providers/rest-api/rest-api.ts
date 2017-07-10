@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+
 /*
   Generated class for the RestApiProvider provider.
 
@@ -9,17 +10,15 @@ import 'rxjs/add/operator/catch';
   for more info on providers and Angular DI.
 */
 
-  // let apiUrl = 'assets/data/game.data.json';
-// let apiUrl = 'https://mysterious-sands-48154.herokuapp.com';
 let apiUrl = 'http://sample-env.mucpcmwpvj.eu-central-1.elasticbeanstalk.com';
 
 @Injectable()
+
 export class RestApiProvider {
   
   constructor(public http: Http) {
       this.get_game_data("1");
   }
-
 
   get_game_data(game_id) {
     return new Promise((resolve, reject) => {
@@ -70,7 +69,5 @@ export class RestApiProvider {
           });
     });
   }
-
-
 
 }
