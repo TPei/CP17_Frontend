@@ -81,21 +81,21 @@ export class GamePage {
     this.edges = this.game_data.edges;
 
 
-    // this.geolocation.getCurrentPosition().then((position) => {
+     this.geolocation.getCurrentPosition().then((position) => {
 
-    //   this.currentCord[0] = position.coords.latitude;
-    //   this.currentCord[1] = position.coords.longitude;
+       this.currentCord[0] = position.coords.latitude;
+       this.currentCord[1] = position.coords.longitude;
 
-    // }, (err) => {
-    //   console.log(err);
-    // })
+     }, (err) => {
+      console.log(err);
+     })
 
 
-    this.geolocation.watchPosition().subscribe((position) => {
+    //this.geolocation.watchPosition().subscribe((position) => {
 
-               this.currentCord[0] = position.coords.latitude;
-               this.currentCord[1] = position.coords.longitude;
-    });
+    //           this.currentCord[0] = position.coords.latitude;
+     //          this.currentCord[1] = position.coords.longitude;
+    //});
 
 
 
