@@ -7,10 +7,9 @@ import { DiseasesPage } from '../pages/diseases/diseases';
 import { IndicatorsPage } from '../pages/indicators/indicators';
 import { PlayerPage } from '../pages/player/player';
 import { RestApiProvider } from '../providers/rest-api/rest-api';
-import { Platform, Nav, NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
-
-
-
+import { PandemicChat } from '../pages/pandemic-chat/pandemic-chat';
+import { Platform, Nav, AlertController, ModalController} from 'ionic-angular';
+import * as firebase from 'firebase';
 
 @Component({
   templateUrl: 'app.html'
@@ -19,12 +18,20 @@ import { Platform, Nav, NavController, NavParams, AlertController, ToastControll
 export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
     rootPage:any = MainMenuPage;
+    jsonReult : any = '';
+    game_id : any = '';
 
-  jsonReult : any = '';
-  game_id : any = '';
-
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen ,private restApiProvider : RestApiProvider ,    private alertCtrl: AlertController) {
-    platform.ready().then(() => {
+    constructor( platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private restApiProvider : RestApiProvider, private alertCtrl: AlertController,public modalCtrl : ModalController) {
+        let config = {
+            apiKey: "AIzaSyDkCp6_HnPP8bNf3RRM_7tGiuKgK7CwCzI",
+            authDomain: "pandemicchat.firebaseapp.com",
+            databaseURL: "https://pandemicchat.firebaseio.com",
+            projectId: "pandemicchat",
+            storageBucket: "pandemicchat.appspot.com",
+            messagingSenderId: "113108546747"
+        };
+        firebase.initializeApp(config);
+        platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
@@ -33,10 +40,16 @@ export class MyApp {
     this.game_get_data();
   }
 
+    initiateChat(){
+        this.modalCtrl.create(PandemicChat).present();
+    }
+
   game_get_data(){
     this.restApiProvider.get_game_data("1").then((result)=> {
       this.jsonReult = result;
       this.game_id = this.jsonReult.game.game_id;
+      localStorage['game_id']=this.game_id;
+      localStorage['user_id']="Anonymous";
       console.log("game id is :"+this.game_id);
 
       
@@ -99,6 +112,4 @@ export class MyApp {
     });
     alert.present();
   }
-
-
 }

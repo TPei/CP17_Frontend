@@ -1,8 +1,9 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { IonicApp, IonicModule, IonicErrorHandler, ModalController } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { GamePage } from '../pages/game/game';
+import { PandemicChat } from '../pages/pandemic-chat/pandemic-chat';
 import { MainMenuPage } from '../pages/main-menu/main-menu';
 import { RuleBookPage } from '../pages/rule-book/rule-book';
 import { OptionsPage } from '../pages/options/options';
@@ -20,12 +21,12 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { RestApiProvider } from '../providers/rest-api/rest-api';
 import { Geolocation } from '@ionic-native/geolocation';
 import { IonicStorageModule } from '@ionic/storage';
-
-// import { MapComponent } from './component/map/map.component';
-// import { AgmCoreModule } from '@agm/core';
-
 import { HttpModule } from '@angular/http';
 import { LocalstorageProvider } from '../providers/localstorage/localstorage';
+import { AngularFireModule } from 'angularfire2';
+
+// AF2 Settings
+// Must export the config
 
 
 @NgModule({
@@ -43,17 +44,15 @@ import { LocalstorageProvider } from '../providers/localstorage/localstorage';
     GameRulesPage,
     DiseasesPage,
     IndicatorsPage,
-    PlayerPage
+    PlayerPage,
+    PandemicChat
   ],
   imports: [
     BrowserModule,
-    // AgmCoreModule.forRoot({
-    //   apiKey: 'AIzaSyB3iOKgL5F3C5luaBh5Hhbj1pa2TCJqIhw'
-    // }),
     HttpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
-  ],
+],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
@@ -69,7 +68,8 @@ import { LocalstorageProvider } from '../providers/localstorage/localstorage';
     GameRulesPage,
     DiseasesPage,
     IndicatorsPage,
-    PlayerPage
+    PlayerPage,
+    PandemicChat
   ],
   providers: [
     StatusBar,
