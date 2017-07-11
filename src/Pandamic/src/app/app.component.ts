@@ -9,6 +9,7 @@ import { PlayerPage } from '../pages/player/player';
 import { RestApiProvider } from '../providers/rest-api/rest-api';
 import { PandemicChat } from '../pages/pandemic-chat/pandemic-chat';
 import { Platform, Nav, AlertController, ModalController} from 'ionic-angular';
+import { LocalstorageProvider } from '../providers/localstorage/localstorage';
 import * as firebase from 'firebase';
 
 @Component({
@@ -20,8 +21,9 @@ export class MyApp {
     rootPage:any = MainMenuPage;
     jsonReult : any = '';
     game_id : any = '';
+    user_id : any = '';
 
-    constructor( platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private restApiProvider : RestApiProvider, private alertCtrl: AlertController,public modalCtrl : ModalController) {
+    constructor( platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private restApiProvider : RestApiProvider, private alertCtrl: AlertController,public modalCtrl : ModalController, private localStr: LocalstorageProvider) {
         let config = {
             apiKey: "AIzaSyDkCp6_HnPP8bNf3RRM_7tGiuKgK7CwCzI",
             authDomain: "pandemicchat.firebaseapp.com",
@@ -48,11 +50,10 @@ export class MyApp {
     this.restApiProvider.get_game_data("1").then((result)=> {
       this.jsonReult = result;
       this.game_id = this.jsonReult.game.game_id;
+      this.user_id = this.localStr.get_data("player_id1");
       localStorage['game_id']=this.game_id;
-      localStorage['user_id']="Anonymous";
-      console.log("game id is :"+this.game_id);
-
-      
+      localStorage['user_id']=this.user_id;
+      console.log("game id is: "+this.game_id + " and you are: "+this.user_id);
     }, (err) => {
        console.log("data failed 1");
     });
