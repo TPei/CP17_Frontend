@@ -10,11 +10,8 @@ import 'rxjs/add/operator/catch';
   for more info on providers and Angular DI.
 */
 
-<<<<<<< HEAD
-=======
   // let apiUrl = 'assets/dummy.json';
 // let apiUrl = 'https://mysterious-sands-48154.herokuapp.com';
->>>>>>> docker-ionic
 let apiUrl = 'http://sample-env.mucpcmwpvj.eu-central-1.elasticbeanstalk.com';
 
 @Injectable()
@@ -75,8 +72,7 @@ export class RestApiProvider {
     });
   }
 
-<<<<<<< HEAD
-=======
+
   post_player_data(input_data:any) {
 
     return new Promise((resolve, reject) => {
@@ -94,6 +90,4 @@ export class RestApiProvider {
     });
   }
 
-
->>>>>>> docker-ionic
 }

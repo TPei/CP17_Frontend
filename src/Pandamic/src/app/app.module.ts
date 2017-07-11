@@ -21,14 +21,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { RestApiProvider } from '../providers/rest-api/rest-api';
 import { Geolocation } from '@ionic-native/geolocation';
 import { IonicStorageModule } from '@ionic/storage';
-<<<<<<< HEAD
-=======
 import { Device } from '@ionic-native/device';
-
 // import { MapComponent } from './component/map/map.component';
 // import { AgmCoreModule } from '@agm/core';
-
->>>>>>> docker-ionic
 import { HttpModule } from '@angular/http';
 import { LocalstorageProvider } from '../providers/localstorage/localstorage';
 import { AngularFireModule } from 'angularfire2';
