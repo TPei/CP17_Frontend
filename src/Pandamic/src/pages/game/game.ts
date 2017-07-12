@@ -4,7 +4,9 @@ import { GlobalVariables } from './map-styles';
 import { NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { LocalstorageProvider } from '../../providers/localstorage/localstorage';
-import {Game_Constants} from '../../providers/Game_Constants/gameconstants';
+import { Game_Constants } from '../../providers/Game_Constants/gameconstants';
+import { MainMenuPage } from '../main-menu/main-menu';
+
 
 
 
@@ -36,7 +38,6 @@ export class GamePage {
   to_location_latitude :any =[];
   to_location_longitude :any =[]; 
   default_player_name : any = ''; 
-  public Token_Data : any  = '';
   refresh_map : any = '';
   playerMarker : any ='';
 
@@ -52,10 +53,13 @@ export class GamePage {
     private localStr: LocalstorageProvider) {
     
     this.styles = globalVariables.styles;
-    this.localStr.get_data(Game_Constants.player_name_string).then((val) => {
-     this.default_player_name = val;
-    });
-    // this.default_player_name = 'DefaultPlayer';
+           if(!Game_Constants.APP_FORCE_START){
+              this.localStr.get_data(Game_Constants.player_name_string).then((val) => {
+               this.default_player_name = val;
+                });
+              }else{
+                this.default_player_name = 'DefaultPlayer';
+            }
   }
 
 
@@ -73,7 +77,6 @@ export class GamePage {
     this.addMainPlayer();
     this.fetchMarkers();
     this.connectMarkers();
-    this.TokenCount();
     }, (err) => {
      this.showToastMessage("Problem in fetching Player Position");
     })
@@ -81,14 +84,42 @@ export class GamePage {
   }
 
   refresh_game_data(){
-    this.restApi.get_game_data(Game_Constants.DEFAULT_GAME_ID).then((result)=> {
-      let game: any = result['game'];
-      this.game_data = game.map;
-      this.player_location_data = game.player;
-      this.locations = this.game_data.locations;    
+     let game: any = '';
+     this.restApi.get_game_data(Game_Constants.DEFAULT_GAME_ID).then((result)=> {
+     game = result['game'];
+     this.game_data = game.map;
+     this.player_location_data = game.player;
+     this.locations = this.game_data.locations; 
+         if(Game_Constants.APP_FORCE_START){
+         this.gamewin_loose(game);   
+         }
        }, (err) => {
        this.showToastMessage ("Error in API or Internet Not working");
     });
+  }
+
+
+  gamewin_loose(game){
+
+      let alert = this.alertCtrl.create({
+      title: game.won==true?'You Won The Game.':'You Loose The Game.',
+      buttons: [
+        {
+          text: 'Go Back Home',
+          role: 'Go Back Home',
+          handler: data => {
+           this.navCtrl.push(MainMenuPage);
+          }
+        },
+        {
+          text: 'cancel',
+          role: 'cancel',
+          handler: data => {
+          }
+        },
+      ]
+    });
+    alert.present();
   }
 
 
@@ -152,20 +183,6 @@ export class GamePage {
     }
   }
 
-
-
-  TokenCount(){
-      for (var _i = 0; _i < this.player_location_data.length; _i++) {
-        if(this.player_location_data[_i].name == this.default_player_name ){
-          this.Token_Data = " TOKENS =>  ";
-        for (var _k = 0; _k < this.player_location_data[_i].tokens.disease_tokens.length; _k++) {
-           this.Token_Data=  this.Token_Data + " "+this.player_location_data[_i].tokens.disease_tokens[_k].color + " : "
-                               + this.player_location_data[_i].tokens.disease_tokens[_k].count;
-                               console.log("Coloer : "+this.player_location_data[_i].tokens.disease_tokens[_k].color );
-            }
-          }
-        }
-  }  
 
   //Load the map and initialized with a mid value
   loadMap() {

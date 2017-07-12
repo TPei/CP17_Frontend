@@ -11,7 +11,7 @@ export class RestApiProvider {
 public Game_Data:any = '';
   
   constructor(public http: Http) {
-      this.get_game_data("1");
+      this.get_game_data(Game_Constants.DEFAULT_GAME_ID);
   }
 
 
@@ -23,8 +23,6 @@ public Game_Data:any = '';
             this.Game_Data = plainToClass(RootObject,res.json());
           }, (err) => {
             reject(err);
-          },()=>{
-            console.log("catch");
           });
     });
   }
@@ -38,8 +36,6 @@ public Game_Data:any = '';
             resolve(res.json());
           }, (err) => {
             reject(err);
-          },()=>{
-            console.log("catch");
           });
     });
   }
@@ -53,7 +49,6 @@ public Game_Data:any = '';
             resolve(res.json());
           }, (err) => { 
             reject(err);
-             console.log("err"+err);
           });
     });
   }
@@ -67,7 +62,6 @@ public Game_Data:any = '';
             resolve(res.json());
           }, (err) => {
             reject(err);
-             console.log("err"+err);
           });
     });
   }
