@@ -4,6 +4,8 @@ import { GlobalVariables } from './map-styles';
 import { NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { LocalstorageProvider } from '../../providers/localstorage/localstorage';
+import {Game_Constants} from '../../providers/Game_Constants/gameconstants';
+
 
 
 declare var google;
@@ -17,7 +19,6 @@ declare var google;
 export class GamePage {
   location: any;
   currentCord: number[] = [];
-  userId:string = "DefaultPlayer";
   dieaseMarkerDistance: number = 20;
   @ViewChild('map') mapElement: ElementRef;
 
@@ -35,9 +36,9 @@ export class GamePage {
   to_location_latitude :any =[];
   to_location_longitude :any =[]; 
   default_player_name : any = ''; 
-  game_id:any= "1";
   public Token_Data : any  = '';
   refresh_map : any = '';
+  playerMarker : any ='';
 
 
   constructor(
@@ -50,13 +51,11 @@ export class GamePage {
     private restApi:RestApiProvider,
     private localStr: LocalstorageProvider) {
     
-
     this.styles = globalVariables.styles;
-    this.localStr.get_data("player_id1").then((val) => {
-      this.default_player_name = val;
-      console.log("Default plauer id is:"+val);
+    this.localStr.get_data(Game_Constants.player_name_string).then((val) => {
+     this.default_player_name = val;
     });
-
+    // this.default_player_name = 'DefaultPlayer';
   }
 
 
@@ -76,27 +75,25 @@ export class GamePage {
     this.connectMarkers();
     this.TokenCount();
     }, (err) => {
-      console.log(err);
+     this.showToastMessage("Problem in fetching Player Position");
     })
 
   }
 
   refresh_game_data(){
-    this.restApi.get_game_data("1").then((result)=> {
+    this.restApi.get_game_data(Game_Constants.DEFAULT_GAME_ID).then((result)=> {
       let game: any = result['game'];
       this.game_data = game.map;
       this.player_location_data = game.player;
       this.locations = this.game_data.locations;    
        }, (err) => {
-       console.log("data failed 1");
+       this.showToastMessage ("Error in API or Internet Not working");
     });
   }
 
 
   //Add the disease markers in the google map
-  addMarkers() {
-    // console.log(this.locations);
-    for (var _i = 0; _i < this.locations.length; _i++) {
+  addMarkers() {    for (var _i = 0; _i < this.locations.length; _i++) {
       this.addMarker(this.locations[_i].latitude,
         this.locations[_i].longitude,
         this.locations[_i].alias,
@@ -106,7 +103,7 @@ export class GamePage {
     }
   }
 
-  playerMarker : any ='';
+
 
   addMainPlayer(){
      for (var _i = 0; _i < this.player_location_data.length; _i++) {
@@ -344,13 +341,9 @@ export class GamePage {
 
     google.maps.event.addListener(marker, 'click', () => {
       
-      infoWindow.open(this.map, marker);
-      this.treatmentPrompt(marker);
-      // if(!this.isMove){
-      // this.presentPrompt();
-      // }else {
-      //   this.movePrompt(marker);
-      // }
+      // infoWindow.open(this.map, marker);
+      this.treatmentPrompt(marker ,'cube count: ' + element.count);
+
     });
 
     });
@@ -365,10 +358,10 @@ export class GamePage {
     });
 
     google.maps.event.addListener(marker, 'click', () => {
-      console.log("1");
-      infoWindow.open(this.map, marker);
+      // console.log("1");
+      // infoWindow.open(this.map, marker);
       if(!this.isMove){
-      this.presentPrompt(marker);
+      this.presentPrompt(marker , 'this is : ' + content, 'color is : ' + color);
       }else {
         this.movePrompt(marker);
       }
@@ -384,9 +377,9 @@ export class GamePage {
     });
 
     google.maps.event.addListener(marker, 'click', () => {
-      console.log("2");
-      infoWindow.open(this.map, marker);
-      this.presentPrompt(marker);
+      // console.log("2");
+      // infoWindow.open(this.map, marker);
+      this.presentPrompt(marker,'this is : ' + content,"");
       // 
     });
   }
@@ -399,34 +392,32 @@ export class GamePage {
     });
 
     google.maps.event.addListener(marker, 'click', () => {
-      console.log("3");
-      infoWindow.open(this.map, marker);
-      this.presentPrompt(marker);
+      // console.log("3");
+      // infoWindow.open(this.map, marker);
+      this.presentPrompt(marker,'this is : ' + content,"");
 
     });
   }
 
-  presentPrompt(marker) {
+  presentPrompt(marker, info , message) {
     let alert = this.alertCtrl.create({
       title: 'Actions',
-      // let bt_text = "";
-      // if(player_role == ){
-
-      // }
+      subTitle : info,
+      message : message,
 
       buttons: [
         
         {
           text: 'Cure',
           handler: data => {
-            let user_id = this.userId;
+            let user_id = this.default_player_name;
             this.cure_treat('cure',user_id, marker['customInfo'], 5);
           }
         },
         {
           text: 'Move',
           handler: data => {
-            let user_id = this.userId;
+            let user_id = this.default_player_name;
             
             this.move(user_id, this.currentCord);
           }
@@ -434,7 +425,7 @@ export class GamePage {
         {
           text: 'Build Research Center',
           handler: data => {
-          let user_id = this.userId;
+          let user_id = this.default_player_name;
             
           this.build(user_id, this.currentCord);
           }
@@ -457,17 +448,11 @@ export class GamePage {
   movePrompt(marker:any) {
     let alert = this.alertCtrl.create({
       title: 'Move to new place',
-      // let bt_text = "";
-      // if(player_role == ){
-
-      // }
-
       buttons: [
-        
         {
           text: this.isMove==true?'Move Here':'Move',
           handler: data => {
-            let user_id = this.userId;
+            let user_id = this.default_player_name;
             this.currentCord[0] = marker.getPosition().lat();
             this.currentCord[1] = marker.getPosition().lng();
             this.move(user_id, this.currentCord);
@@ -478,8 +463,6 @@ export class GamePage {
           role: 'cancel',
           handler: data => {
             this.isMove = false;
-            // console.log('Cancel');
-
           }
         },
       ]
@@ -488,27 +471,23 @@ export class GamePage {
   }
 
 
-  treatmentPrompt(marker:any) {
+  treatmentPrompt(marker:any , info: string) {
     let alert = this.alertCtrl.create({
       title: 'Treat the cure',
-      // let bt_text = "";
-      // if(player_role == ){
-
-      // }
-
+      subTitle : info,
       buttons: [
         
          {
           text: 'Cure',
           handler: data => {
-            let user_id = this.userId;
+            let user_id = this.default_player_name;
             this.cure_treat("cure",user_id, marker['customInfo'], 1);
           }
         },
         {
           text: 'Treat',
           handler: data => {
-            let user_id = this.userId;
+            let user_id = this.default_player_name;
             console.log(marker['customInfo']);
             this.cure_treat("treat",user_id, marker['customInfo'], 1);
           }
@@ -527,20 +506,14 @@ export class GamePage {
     alert.present();
   }
 
+   cure_treat(type,userId, diseaseType, noofCubes) {
+
+    let response = this.restApi.post_game_data(this.dataForCureMoveBuild(type,userId,this.currentCord,Game_Constants.DEFAULT_GAME_ID,diseaseType),"/action");
+     console.log("response is :"+JSON.stringify(response));
+     this.refresh_game_data();
+   }
 
 
-
-
-
-
-  cure_treat(type,userId, diseaseType, noofCubes) {
-
-    let response = this.restApi.post_game_data(this.dataForCureMoveBuild(type,userId,this.currentCord,this.game_id,diseaseType),"/action");
-     console.log(response);
-     this.ionViewDidLoad();
-
-
-  }
   
   dataForCureMoveBuild(type,user_id,coord, game_id,disease_color){
     let x= {
@@ -562,18 +535,33 @@ export class GamePage {
     if(!this.isMove){
     this.isMove = true;
     this.showToastMessage ("select destination");
-  } else {
-
-    this.restApi.put_game_data(this.dataForCureMoveBuild("move",user_id,this.currentCord,this.game_id,""),"/action");
-    this.isMove = false;
-     this.ionViewDidLoad();
+    } else {
+    this.restApi.put_game_data(
+      this.dataForCureMoveBuild("move",user_id,this.currentCord,Game_Constants.DEFAULT_GAME_ID,""),"/action")
+       .then((result)=> {
+         let response = result['data'];
+             if(response.success){
+               this.showToastMessage("Movement Successful");
+             } else{
+               this.showToastMessage("Movement Failed");
+             }   
+           }, (err) => {
+           this.showToastMessage ("Error in API or Internet Not working");
+        });
+      this.isMove = false;
+      this.refresh_game_data();
   }
   }
 
   build(user_id,building_type) {
-    this.restApi.post_game_data(this.dataForCureMoveBuild("build_research",user_id,this.currentCord,this.game_id,""),"/action");
+    this.restApi.post_game_data(this.dataForCureMoveBuild("build_research",user_id,this.currentCord,Game_Constants.DEFAULT_GAME_ID,""),"/action")
+    .then((result)=> {
+     console.log("build Result"+JSON.stringify(result));    
+       }, (err) => {
+       this.showToastMessage ("Error in API or Internet Not working");
+    });
     this.isMove = false;
-    this.ionViewDidLoad();
+    this.refresh_game_data();
   }
  getPosition(position):void {
    let cord : any[] = [];
@@ -582,8 +570,8 @@ export class GamePage {
    this.currentCord.push(position.coords.longitude);
   //  this.currentCord = cord;
   setTimeout(handler=>{
-    console.log(this.currentCord[0]);
-    console.log(this.currentCord[1]);
+    // console.log(this.currentCord[0]);
+    // console.log(this.currentCord[1]);
   },300);
     
 }
