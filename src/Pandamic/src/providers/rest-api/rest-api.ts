@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import {plainToClass} from "class-transformer";
+// import {plainToClass} from "class-transformer";
 import {Game_Constants} from '../../providers/Game_Constants/gameconstants';
 
 @Injectable()
@@ -20,22 +20,27 @@ public Game_Data:any = '';
          this.http.get(Game_Constants.API_URL+"/game?id="+game_id )
           .subscribe(res => {
             resolve(res.json());
-            this.Game_Data = plainToClass(RootObject,res.json());
+            // this.Game_Data = plainToClass(RootObject,res.json());
           }, (err) => {
-            reject(err);
+          },()=>{
+            console.log("catch");
           });
     });
   }
 
   post_game_data(input_data:any,post_location:string) {
+    
     return new Promise((resolve, reject) => {
         let headers = new Headers();
+       
         headers.append('Content-Type', 'application/json');
-        this.http.post(Game_Constants.API_URL+"/game"+post_location ,headers,input_data)
+        this.http.post(Game_Constants.API_URL+"/game"+post_location ,input_data)
           .subscribe(res => {
+            
             resolve(res.json());
           }, (err) => {
-            reject(err);
+          },()=>{
+            console.log("catch");
           });
     });
   }
@@ -44,11 +49,13 @@ public Game_Data:any = '';
     return new Promise((resolve, reject) => {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
+        console.log('in post');
+        console.log(input_data);
         this.http.put(Game_Constants.API_URL+"/game"+post_location ,headers,input_data)
           .subscribe(res => {
             resolve(res.json());
           }, (err) => { 
-            reject(err);
+             console.log("err"+err);
           });
     });
   }
@@ -57,11 +64,11 @@ public Game_Data:any = '';
     return new Promise((resolve, reject) => {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        this.http.post(Game_Constants.API_URL+"/game/player",input_data)
+        this.http.post(Game_Constants.API_URL+"/game/player",headers,input_data)
           .subscribe(res => {
             resolve(res.json());
           }, (err) => {
-            reject(err);
+             console.log("err"+err);
           });
     });
   }

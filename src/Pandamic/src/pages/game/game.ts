@@ -183,7 +183,6 @@ export class GamePage {
     }
   }
 
-
   //Load the map and initialized with a mid value
   loadMap() {
     // console.log(this.location);
@@ -217,8 +216,8 @@ export class GamePage {
     });
 
     let _alias = alias;
-    console.log(Number(Number(lattitue)+50));
-    if (research_building) { console.log("dsfdsf");
+    // console.log(Number(Number(lattitue)+50));
+    if (research_building) { 
 
       let arr = this.modifiedLatLng(lattitue,longitute);
 
@@ -371,14 +370,14 @@ export class GamePage {
   addController(marker, content, color, cube_info) {
     //  console.log("cube data : "+ JSON.stringify(cube_info));
     let infoWindow = new google.maps.InfoWindow({
-      content: 'this is : ' + content + '\n' + 'color is : ' + color
+      content: 'Location : ' + content + '\n' + 'Color : ' + color
     });
 
     google.maps.event.addListener(marker, 'click', () => {
       // console.log("1");
       // infoWindow.open(this.map, marker);
       if(!this.isMove){
-      this.presentPrompt(marker , 'this is : ' + content, 'color is : ' + color);
+      this.presentPrompt(marker , 'Location : ' + content, 'Color : ' + color);
       }else {
         this.movePrompt(marker);
       }
@@ -390,13 +389,13 @@ export class GamePage {
 
   add_Research_Controller(marker, content) {
     let infoWindow = new google.maps.InfoWindow({
-      content: 'this is : ' + content
+      content: 'Location : ' + content
     });
 
     google.maps.event.addListener(marker, 'click', () => {
       // console.log("2");
       // infoWindow.open(this.map, marker);
-      this.presentPrompt(marker,'this is : ' + content,"");
+      this.presentPrompt(marker,'Location : ' + content,"");
       // 
     });
   }
@@ -431,14 +430,14 @@ export class GamePage {
             this.cure_treat('cure',user_id, marker['customInfo'], 5);
           }
         },
-        {
-          text: 'Move',
-          handler: data => {
-            let user_id = this.default_player_name;
+        // {
+        //   text: 'Move',
+        //   handler: data => {
+        //     let user_id = this.default_player_name;
             
-            this.move(user_id, this.currentCord);
-          }
-        },
+        //     this.move(user_id, this.currentCord);
+        //   }
+        // },
         {
           text: 'Build Research Center',
           handler: data => {
