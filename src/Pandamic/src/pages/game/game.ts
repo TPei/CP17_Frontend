@@ -54,6 +54,7 @@ export class GamePage {
     this.styles = globalVariables.styles;
     this.localStr.get_data("player_id1").then((val) => {
       this.default_player_name = val;
+      console.log("Default plauer id is:"+val);
     });
 
   }
@@ -118,7 +119,7 @@ export class GamePage {
         icon: default_player
       });
       this.add_player_informations(this.playerMarker, this.player_location_data[_i].name);
-      setInterval(() => {this.refreshPlayerLocation();}, 2000);
+      setInterval(() => {this.refreshPlayerLocation();}, 100);
       }
     }
    }

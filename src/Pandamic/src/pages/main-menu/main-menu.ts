@@ -83,13 +83,8 @@ export class MainMenuPage {
 
   get_player_location(){
    this.geolocation.getCurrentPosition().then((position) => {
-
       this.player_current_location_lat = position.coords.latitude;
       this.player_current_location_long = position.coords.longitude;
-
-
-       //After the Player Location Create the Player  
-      this.create_Player();
 
     }, (err) => {
       console.log(err);
@@ -136,6 +131,9 @@ export class MainMenuPage {
     // this.navCtrl.push(LoginPage);
     //  this.showToastMessage('Data is Not Availble Either check or internet or Server is not working');
    //this.showAlert();
+
+  //After the Player Location Create the Player  
+  this.create_Player();
   this.navCtrl.push(JoinGamePage, this.json_data);
   }goToSignUp(params){
     if (!params) params = {};

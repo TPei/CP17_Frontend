@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { GamePage } from '../pages/game/game';
+import { PandemicChat } from '../pages/pandemic-chat/pandemic-chat';
 import { MainMenuPage } from '../pages/main-menu/main-menu';
 import { RuleBookPage } from '../pages/rule-book/rule-book';
 import { OptionsPage } from '../pages/options/options';
@@ -27,7 +28,7 @@ import { Device } from '@ionic-native/device';
 
 import { HttpModule } from '@angular/http';
 import { LocalstorageProvider } from '../providers/localstorage/localstorage';
-
+import { AngularFireModule } from 'angularfire2';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { LocalstorageProvider } from '../providers/localstorage/localstorage';
     GameRulesPage,
     DiseasesPage,
     IndicatorsPage,
-    PlayerPage
+    PlayerPage,
+    PandemicChat
   ],
   imports: [
     BrowserModule,
@@ -70,7 +72,8 @@ import { LocalstorageProvider } from '../providers/localstorage/localstorage';
     GameRulesPage,
     DiseasesPage,
     IndicatorsPage,
-    PlayerPage
+    PlayerPage,
+    PandemicChat
   ],
   providers: [
     StatusBar,
