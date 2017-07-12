@@ -36,9 +36,9 @@ public Game_Data:any = '';
         headers.append('Content-Type', 'application/json');
         this.http.post(Game_Constants.API_URL+"/game"+post_location ,input_data)
           .subscribe(res => {
-            
             resolve(res.json());
           }, (err) => {
+            reject(err.json());
           },()=>{
             console.log("catch");
           });

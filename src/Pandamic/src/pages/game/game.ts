@@ -90,7 +90,7 @@ export class GamePage {
      this.game_data = game.map;
      this.player_location_data = game.player;
      this.locations = this.game_data.locations; 
-         if(Game_Constants.APP_FORCE_START){
+         if(!Game_Constants.APP_FORCE_START){
          this.gamewin_loose(game);   
          }
        }, (err) => {
@@ -206,7 +206,17 @@ export class GamePage {
 
 
   addMarker(lattitue: number, longitute: number, alias: string, color: string, research_building: boolean, cube_info: string) {
-   let location_img: string = "/assets/img/map-marker-icon.png"; 
+   let location_img: string = '';
+   if(color == "blue"){
+    location_img = "/assets/img/map-marker-icon-blue.png";
+   } else if(color == "yellow"){
+      location_img = "/assets/img/map-marker-icon-yellow.png";
+   } else if(color == "green"){
+      location_img = "/assets/img/map-marker-icon-green.png";
+   } else if(color == "red"){
+      location_img = "/assets/img/map-marker-icon-red.png"
+   } 
+
     let research_centre_img = "/assets/img/office-building-icon.png";
     let marker = new google.maps.Marker({
       map: this.map,
@@ -239,10 +249,7 @@ export class GamePage {
 
   modifiedLatLng(lat,lng) : any[]{
     var decPart_lat = (lat+"").split(".");
-    let disease_lat = 0;
-
     var decPart_lng = (lng+"").split(".");
-    let disease_lng = 0;
     this.dieaseMarkerDistance = 300;
     let coor : any[] = [];
 
@@ -351,13 +358,8 @@ export class GamePage {
         customInfo:element.color
       });
 
-       let infoWindow = new google.maps.InfoWindow({
-         content: 'cube count: ' + element.count
-      });
-
     google.maps.event.addListener(marker, 'click', () => {
-      
-      // infoWindow.open(this.map, marker);
+ 
       this.treatmentPrompt(marker ,'cube count: ' + element.count);
 
     });
@@ -368,14 +370,7 @@ export class GamePage {
 
   //Add control and cube informations 
   addController(marker, content, color, cube_info) {
-    //  console.log("cube data : "+ JSON.stringify(cube_info));
-    let infoWindow = new google.maps.InfoWindow({
-      content: 'Location : ' + content + '\n' + 'Color : ' + color
-    });
-
     google.maps.event.addListener(marker, 'click', () => {
-      // console.log("1");
-      // infoWindow.open(this.map, marker);
       if(!this.isMove){
       this.presentPrompt(marker , 'Location : ' + content, 'Color : ' + color);
       }else {
@@ -388,28 +383,16 @@ export class GamePage {
 
 
   add_Research_Controller(marker, content) {
-    let infoWindow = new google.maps.InfoWindow({
-      content: 'Location : ' + content
-    });
 
     google.maps.event.addListener(marker, 'click', () => {
-      // console.log("2");
-      // infoWindow.open(this.map, marker);
       this.presentPrompt(marker,'Location : ' + content,"");
-      // 
     });
   }
 
 
 
   add_player_informations(marker, content) {
-    let infoWindow = new google.maps.InfoWindow({
-      content: 'this is : ' + content
-    });
-
     google.maps.event.addListener(marker, 'click', () => {
-      // console.log("3");
-      // infoWindow.open(this.map, marker);
       this.presentPrompt(marker,'this is : ' + content,"");
 
     });
@@ -524,8 +507,16 @@ export class GamePage {
 
    cure_treat(type,userId, diseaseType, noofCubes) {
 
-    let response = this.restApi.post_game_data(this.dataForCureMoveBuild(type,userId,this.currentCord,Game_Constants.DEFAULT_GAME_ID,diseaseType),"/action");
-     console.log("response is :"+JSON.stringify(response));
+    this.restApi.post_game_data(this.dataForCureMoveBuild(type,userId,this.currentCord,Game_Constants.DEFAULT_GAME_ID,diseaseType),"/action")
+    .then((result)=>{
+       this.showToastMessage('STATUS :'+ JSON.stringify(result));
+    },(err)=>{
+      if(err.data.message != 'undefined'){
+        this.showToastMessage('STATUS :'+err.data.success+'  '+err.data.message);
+      }else{
+        this.showToastMessage('STATUS :'+err.data.success);
+      } 
+    });
      this.refresh_game_data();
    }
 
@@ -572,24 +563,20 @@ export class GamePage {
   build(user_id,building_type) {
     this.restApi.post_game_data(this.dataForCureMoveBuild("build_research",user_id,this.currentCord,Game_Constants.DEFAULT_GAME_ID,""),"/action")
     .then((result)=> {
-     console.log("build Result"+JSON.stringify(result));    
-       }, (err) => {
-       this.showToastMessage ("Error in API or Internet Not working");
+         this.showToastMessage('STATUS :' + JSON.stringify(result));   
+       }, (err) => {  
+          if(err.data.message != 'undefined'){
+              this.showToastMessage('STATUS :'+err.data.success+'  '+err.data.message);
+            }else{
+              this.showToastMessage('STATUS :'+err.data.success);
+            } 
     });
     this.isMove = false;
     this.refresh_game_data();
   }
  getPosition(position):void {
-   let cord : any[] = [];
-
    this.currentCord.push(position.coords.latitude);
    this.currentCord.push(position.coords.longitude);
-  //  this.currentCord = cord;
-  setTimeout(handler=>{
-    // console.log(this.currentCord[0]);
-    // console.log(this.currentCord[1]);
-  },300);
-    
 }
 
 
