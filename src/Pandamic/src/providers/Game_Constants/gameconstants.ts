@@ -8,6 +8,6 @@ export class Game_Constants {
     public static readonly FIREBASE_PROJECT_ID = 'pandemicchat';
     public static readonly FIREBASE_STORAGE_BUCKET = 'pandemicchat.appspot.com';
     public static readonly FIREBASE_MESSAGE_SENDER_ID = '113108546747';
-    public static readonly APP_FORCE_START = true;
-    public static readonly APP_DEBUG = true;
+    public static readonly APP_FORCE_START = false;
+    public static readonly APP_DEBUG = false;
 }

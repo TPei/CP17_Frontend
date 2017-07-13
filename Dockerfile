@@ -19,10 +19,10 @@ RUN mkdir $HOME
 ADD src /$HOME
 
 #Switch the Path
-RUN cd $HOME/pandamic
+RUN cd $HOME/Pandamic
 
 #Defining Working Directory
-WORKDIR $HOME/pandamic
+WORKDIR $HOME/Pandamic
 
 #Install the Dependencies
 RUN npm install

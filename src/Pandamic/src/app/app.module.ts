@@ -28,7 +28,6 @@ import { Device } from '@ionic-native/device';
 
 import { HttpModule } from '@angular/http';
 import { LocalstorageProvider } from '../providers/localstorage/localstorage';
-import { AngularFireModule } from 'angularfire2';
 
 @NgModule({
   declarations: [

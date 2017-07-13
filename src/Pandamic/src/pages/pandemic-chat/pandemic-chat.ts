@@ -60,7 +60,7 @@ export class PandemicChat {
         text: this.newmessage,
         // photoUrl: this.photoURL
       }).then(function() {
-        console.log("********");
+        //console.log("********");
         this.newmessage = '';
         this.scrollChatToBottom();
         }.bind(this)).catch(function(error) {
