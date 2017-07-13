@@ -9,14 +9,14 @@ Getting Started
 
 Run the command 
 	
-	*docker-compose up --build
+	docker-compose up --build
 
 Alternatively, you can bring the services up in the background using detached mode with up, see what's going on with ps and remove the containers entirely (including data volumes used by mongodb) via down --volumes:
 
-	*docker-compose up -d --build
+	docker-compose up -d --build
 	
-	*docker-compose ps
+	docker-compose ps
 	
-	*docker-compose down --volumes
+	docker-compose down --volumes
 
 You can then open Kitematic (refresh) and view your containers and the logs in a nice UI.
