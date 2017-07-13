@@ -90,8 +90,10 @@ export class GamePage {
      this.game_data = game.map;
      this.player_location_data = game.player;
      this.locations = this.game_data.locations; 
-         if(!Game_Constants.APP_FORCE_START){
-         this.gamewin_loose(game);   
+         if(!Game_Constants.APP_FORCE_START ){
+           if(game.won || game.lost){
+             this.gamewin_loose(game);
+             }   
          }
        }, (err) => {
        this.showToastMessage ("Error in API or Internet Not working");

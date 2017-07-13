@@ -51,7 +51,7 @@ public Game_Data:any = '';
         headers.append('Content-Type', 'application/json');
         console.log('in post');
         console.log(input_data);
-        this.http.put(Game_Constants.API_URL+"/game"+post_location ,headers,input_data)
+        this.http.put(Game_Constants.API_URL+"/game"+post_location ,input_data)
           .subscribe(res => {
             resolve(res.json());
           }, (err) => { 
@@ -64,7 +64,7 @@ public Game_Data:any = '';
     return new Promise((resolve, reject) => {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        this.http.post(Game_Constants.API_URL+"/game/player",headers,input_data)
+        this.http.post(Game_Constants.API_URL+"/game/player",input_data)
           .subscribe(res => {
             resolve(res.json());
           }, (err) => {

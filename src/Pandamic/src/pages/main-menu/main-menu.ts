@@ -40,15 +40,17 @@ export class MainMenuPage {
 
      //For Local Storage testing
     this.localStr.get_data(Game_Constants.player_name_string).then((val) => {
-      
+      console.log("palye name is:"+val);
       if(val==null || val == ''){
       var player_id: any = this.generateUUID();
-        var data = {game_id : "1", player_id : player_id.toString(),location : 
+        var data = {game_id :  Game_Constants.DEFAULT_GAME_ID.toString(), player_id : player_id.toString(),location : 
         {
           x:this.player_current_location_lat.toString() ,
            y:this.player_current_location_long.toString()} 
-        };       
+        };     
+          console.log("post data is:"+JSON.stringify(data));  
          this.restApiProvider.post_player_data(data).then((result)=> {
+         console.log("result data is:"+JSON.stringify(result));  
                this.localStr.save_data(Game_Constants.player_name_string,player_id);
                this.showToastMessage("Player is Created");
                this.game_get_data();
@@ -79,13 +81,11 @@ export class MainMenuPage {
    this.geolocation.getCurrentPosition().then((position) => {
       this.player_current_location_lat = position.coords.latitude;
       this.player_current_location_long = position.coords.longitude;
+      console.log("Player location is :"+  this.player_current_location_long);
 
     }, (err) => {
       console.log(err);
     })
-   
-    this.game_get_data();
-
   }
 
   game_get_data(){
@@ -126,7 +126,6 @@ export class MainMenuPage {
     // this.navCtrl.push(LoginPage);
     //  this.showToastMessage('Data is Not Availble Either check or internet or Server is not working');
    //this.showAlert();
-
   //After the Player Location Create the Player  
   this.create_Player();
   this.navCtrl.push(JoinGamePage, this.json_data);
