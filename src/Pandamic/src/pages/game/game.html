@@ -1,0 +1,20 @@
+<ion-header>
+  
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <ion-navbar hideBackButton>
+    <ion-title>
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="refresh_game_data()" ion-button color="secondary">Refresh</button>
+      <button ion-button (click)="ionViewDidLoad()" ion-button color="primary">Reset Map Position</button>
+    </ion-buttons>  
+  </ion-navbar>
+</ion-header>
+<ion-content padding id="page1">
+ <div #map id="map">
+ </div> 
+
+</ion-content>

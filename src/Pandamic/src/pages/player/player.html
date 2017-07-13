@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      player
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding id="page13">
+
+
+<ion-list *ngFor="let data of player_data" no-lines>
+ <ion-card>
+  <ion-card-header>
+   Name : {{ data.name }}     
+  </ion-card-header>
+  <ion-card-content *ngFor="let tokens of data.tokens.disease_tokens">
+	 Colour : {{tokens.color}}
+	 Count  : {{tokens.count}}
+  </ion-card-content>
+
+</ion-card>
+</ion-list>
+</ion-content>
