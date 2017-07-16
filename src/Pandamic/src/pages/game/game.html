@@ -6,73 +6,15 @@
 
     <ion-navbar hideBackButton>
     <ion-title>
-     {{Token_Data}}
     </ion-title>
     <ion-buttons end>
       <button ion-button (click)="refresh_game_data()" ion-button color="secondary">Refresh</button>
-    </ion-buttons> 
+      <button ion-button (click)="ionViewDidLoad()" ion-button color="primary">Reset Map Position</button>
+    </ion-buttons>  
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page1">
  <div #map id="map">
  </div> 
-
-
-
-<!--<div id="map"></div>-->
-<!--<p>
-  map worksffsdfds!
-</p>-->
-<!--<h1>{{ title }}</h1>-->
-
-<!--<sebm-google-map [latitude]="lat" [longitude]="lng" [styles]="styles">-->
-  <!--<sebm-google-map-marker [latitude]="lat" [longitude]="lng" [label]="'M'"></sebm-google-map-marker>-->
-<!--<appMarkerCluster [points]="points" ></appMarkerCluster>-->
-  <!--<appMarkerCluster  ></appMarkerCluster>-->
-<!--</sebm-google-map>-->
-<!--<agm-map 
-
-[latitude]="lat" 
-[longitude]="lng" 
-[styles]="styles" 
-[minZoom]="minZoom" 
-[maxZoom]="maxZoom"
-[zoomControl] = "false" 
-[streetViewControl] = "false" 
-[rotateControl]="false"
-[fullscreenControl]= "false"
-
->-->
-  
-  
-  <!--<agm-marker [latitude]="lat" [longitude]="lng" [label]="M"></agm-marker>-->
-  <!--<agm-marker 
-          *ngFor="let m of markers; let i = index"
-          (markerClick)="alert('dflkdsf')"
-          [latitude]="m.lat"
-          [longitude]="m.lng"
-          [label]="m.label"
-          [markerDraggable]="m.draggable"
-          [iconUrl]="m.iconUrl"
-          (dragEnd)="markerDragEnd(m, $event)"
-          [title]="title" >
-        <agm-info-window>
-          <strong>InfoWindow content</strong>
-        </agm-info-window>
-        
-      </agm-marker>-->
-       <!--<agm-circle [latitude]="lat + 0.3" [longitude]="lng" 
-          [radius]="5000"
-          [fillColor]="'red'"
-          [circleDraggable]="false"
-          [editable]="false">
-      </agm-circle>-->
-
-
-<!--</agm-map>-->
-
-
-  <!--<app-map></app-map>-->
-
 
 </ion-content>

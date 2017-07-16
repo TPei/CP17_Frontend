@@ -16,20 +16,11 @@
   <ion-card-header>
    Name : {{ data.name }}     
   </ion-card-header>
-  <ion-card-content>
-
-  //temp need to be looped for right now testing only
-	  {{data.tokens.disease_tokens[0].color}}
-	  {{data.tokens.disease_tokens[0].count}}
+  <ion-card-content *ngFor="let tokens of data.tokens.disease_tokens">
+	 Colour : {{tokens.color}}
+	 Count  : {{tokens.count}}
   </ion-card-content>
 
 </ion-card>
 </ion-list>
-
-<!-- <ion-list *ngFor="let data1 of tokens no-lines>
-    color : {{data1.disease_tokens}}
-    count : {{data1.disease_tokens}}
-  </ion-list> -->
-
-
 </ion-content>

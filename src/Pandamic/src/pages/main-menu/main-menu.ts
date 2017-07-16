@@ -10,6 +10,7 @@ import { JoinGamePage } from '../join-game/join-game';
 import { RestApiProvider } from '../../providers/rest-api/rest-api';
 import { LocalstorageProvider } from '../../providers/localstorage/localstorage';
 import { Geolocation } from '@ionic-native/geolocation';
+import {Game_Constants} from '../../providers/Game_Constants/gameconstants';
 
 
 
@@ -23,8 +24,6 @@ export class MainMenuPage {
   json_data : any ='';
   public player_current_location_lat : any = "";
   public player_current_location_long : any = "";
-
- game_id:any = 1;
   constructor(public navCtrl: NavController ,
    public restApiProvider : RestApiProvider ,
    public toastCtrl: ToastController,
@@ -32,37 +31,34 @@ export class MainMenuPage {
    private localStr : LocalstorageProvider,
    private geolocation : Geolocation) {
 
-   //this.localStr.save_data("player_id1" ,"");
-
    this.get_player_location();
+   this.game_get_data();
   }
 
 
   create_Player(){
 
      //For Local Storage testing
-    this.localStr.get_data("player_id1").then((val) => {
-      
+    this.localStr.get_data(Game_Constants.player_name_string).then((val) => {
+      console.log("palye name is:"+val);
       if(val==null || val == ''){
-      
       var player_id: any = this.generateUUID();
-        var data = {game_id : "1", player_id : player_id.toString(),location : 
+        var data = {game_id :  Game_Constants.DEFAULT_GAME_ID.toString(), player_id : player_id.toString(),location : 
         {
           x:this.player_current_location_lat.toString() ,
            y:this.player_current_location_long.toString()} 
-        };
-        console.log("post data is : "+JSON.stringify(data));
-       
+        };     
+          console.log("post data is:"+JSON.stringify(data));  
          this.restApiProvider.post_player_data(data).then((result)=> {
-               this.localStr.save_data("player_id1",player_id);
-               console.log("Player is being created"+ JSON.stringify(result));
+         console.log("result data is:"+JSON.stringify(result));  
+               this.localStr.save_data(Game_Constants.player_name_string,player_id);
+               this.showToastMessage("Player is Created");
                this.game_get_data();
               }, (err) => {
-                 console.log("data failed dasdasd");
+                  this.showToastMessage("Some Issue with API or Internet");
               });
-       }else{
-         console.log("Player ID is : "+val);
-          this.game_get_data();
+       }else {
+          this.showToastMessage("Welcome Back : "+val);
        }
     });
 
@@ -83,24 +79,17 @@ export class MainMenuPage {
 
   get_player_location(){
    this.geolocation.getCurrentPosition().then((position) => {
-
       this.player_current_location_lat = position.coords.latitude;
       this.player_current_location_long = position.coords.longitude;
-
-
-       //After the Player Location Create the Player  
-      this.create_Player();
+      console.log("Player location is :"+  this.player_current_location_long);
 
     }, (err) => {
       console.log(err);
     })
-   
-    this.game_get_data();
-
   }
 
   game_get_data(){
-    this.restApiProvider.get_game_data(this.game_id).then((result)=> {
+    this.restApiProvider.get_game_data(Game_Constants.DEFAULT_GAME_ID).then((result)=> {
       this.json_data = result;
     }, (err) => {
        console.log("data failed 1");
@@ -133,9 +122,12 @@ export class MainMenuPage {
     this.navCtrl.push(OptionsPage);
   }goToLogin(params){
     if (!params) params = {};
+
     // this.navCtrl.push(LoginPage);
     //  this.showToastMessage('Data is Not Availble Either check or internet or Server is not working');
    //this.showAlert();
+  //After the Player Location Create the Player  
+  this.create_Player();
   this.navCtrl.push(JoinGamePage, this.json_data);
   }goToSignUp(params){
     if (!params) params = {};

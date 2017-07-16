@@ -9,15 +9,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { RestApiProvider } from '../../providers/rest-api/rest-api';
-// import { NavController } from 'ionic-angular';
-//import { Geolocation } from '@ionic-native/geolocation';
-// import { MapComponent } from '../../app/component/map/map.component';
 import { GlobalVariables } from './map-styles';
-// import { GameService } from '../../services/game.service';
-// import { GameService } from '../../providers/restgame.service';
 import { NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { LocalstorageProvider } from '../../providers/localstorage/localstorage';
+import { Game_Constants } from '../../providers/Game_Constants/gameconstants';
+import { MainMenuPage } from '../main-menu/main-menu';
 var GamePage = (function () {
     function GamePage(navCtrl, navParams, globalVariables, toastCtrl, alertCtrl, geolocation, restApi, localStr) {
         var _this = this;
@@ -30,8 +27,7 @@ var GamePage = (function () {
         this.restApi = restApi;
         this.localStr = localStr;
         this.currentCord = [];
-        // geolocation: any = "";
-        this.dieaseMarkerDistance = 170;
+        this.dieaseMarkerDistance = 20;
         this.game_data = '';
         this.locations = [];
         this.player_location_data = '';
@@ -42,10 +38,17 @@ var GamePage = (function () {
         this.to_location_latitude = [];
         this.to_location_longitude = [];
         this.default_player_name = '';
+        this.refresh_map = '';
+        this.playerMarker = '';
         this.styles = globalVariables.styles;
-        this.localStr.get_data("player_id1").then(function (val) {
-            _this.default_player_name = val;
-        });
+        if (!Game_Constants.APP_FORCE_START) {
+            this.localStr.get_data(Game_Constants.player_name_string).then(function (val) {
+                _this.default_player_name = val;
+            });
+        }
+        else {
+            this.default_player_name = 'DefaultPlayer';
+        }
     }
     GamePage.prototype.ionViewDidLoad = function () {
         var _this = this;
@@ -56,61 +59,90 @@ var GamePage = (function () {
         this.geolocation.getCurrentPosition().then(function (position) {
             _this.currentCord[0] = position.coords.latitude;
             _this.currentCord[1] = position.coords.longitude;
-            // this.location = position;
-            // let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            //  console.log('init');
-            //   console.log(this.currentCord[0]);
-            //   console.log( this.currentCord[1]);
-            // let mapOptions = {
-            //   center: latLng,
-            //   zoom: 15,
-            //   mapTypeId: google.maps.MapTypeId.ROADMAP
-            // }
-            // this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
             _this.loadMap();
             _this.addMarkers();
-            _this.addPlayerMarkers();
+            _this.addOtherPlayersMarkers();
+            _this.addMainPlayer();
             _this.fetchMarkers();
             _this.connectMarkers();
-            _this.refresh_game_data();
         }, function (err) {
-            console.log(err);
+            _this.showToastMessage("Problem in fetching Player Position");
         });
     };
     GamePage.prototype.refresh_game_data = function () {
         var _this = this;
-        this.restApi.get_game_data("1").then(function (result) {
-            var game = result['game'];
+        var game = '';
+        this.restApi.get_game_data(Game_Constants.DEFAULT_GAME_ID).then(function (result) {
+            game = result['game'];
             _this.game_data = game.map;
             _this.player_location_data = game.player;
             _this.locations = _this.game_data.locations;
-            console.log("refresh game is :" + game.player.);
+            if (Game_Constants.APP_FORCE_START) {
+                _this.gamewin_loose(game);
+            }
         }, function (err) {
-            console.log("data failed 1");
+            _this.showToastMessage("Error in API or Internet Not working");
         });
+    };
+    GamePage.prototype.gamewin_loose = function (game) {
+        var _this = this;
+        var alert = this.alertCtrl.create({
+            title: game.won == true ? 'You Won The Game.' : 'You Loose The Game.',
+            buttons: [
+                {
+                    text: 'Go Back Home',
+                    role: 'Go Back Home',
+                    handler: function (data) {
+                        _this.navCtrl.push(MainMenuPage);
+                    }
+                },
+                {
+                    text: 'cancel',
+                    role: 'cancel',
+                    handler: function (data) {
+                    }
+                },
+            ]
+        });
+        alert.present();
     };
     //Add the disease markers in the google map
     GamePage.prototype.addMarkers = function () {
-        console.log(this.locations);
         for (var _i = 0; _i < this.locations.length; _i++) {
             this.addMarker(this.locations[_i].latitude, this.locations[_i].longitude, this.locations[_i].alias, this.locations[_i].color, this.locations[_i].research_building, this.locations[_i].cubes);
         }
     };
-    GamePage.prototype.addPlayerMarkers = function () {
-        this.restApi.get_game_data("1");
+    GamePage.prototype.addMainPlayer = function () {
+        var _this = this;
         for (var _i = 0; _i < this.player_location_data.length; _i++) {
-            var player_img = '/assets/img/Doctor-icon.png';
             var default_player = '/assets/img/default_player.png';
             if (this.player_location_data[_i].name == this.default_player_name) {
-                var marker = new google.maps.Marker({
+                this.playerMarker = new google.maps.Marker({
                     map: this.map,
                     animation: google.maps.Animation.DROP,
-                    position: new google.maps.LatLng(this.player_location_data[_i].at.latitude, this.player_location_data[_i].at.longitude),
+                    position: new google.maps.LatLng(this.currentCord[0], this.currentCord[1]),
                     icon: default_player
                 });
-                this.add_player_informations(marker, this.player_location_data[_i].name);
+                this.add_player_informations(this.playerMarker, this.player_location_data[_i].name);
+                setInterval(function () { _this.refreshPlayerLocation(); }, 100);
             }
-            else {
+        }
+    };
+    GamePage.prototype.refreshPlayerLocation = function () {
+        var _this = this;
+        this.geolocation.getCurrentPosition().then(function (position) {
+            _this.currentCord[0] = position.coords.latitude;
+            _this.currentCord[1] = position.coords.longitude;
+            _this.playerMarker.position = new google.maps.LatLng(_this.currentCord[0], _this.currentCord[1]);
+            _this.playerMarker.center = new google.maps.LatLng(_this.currentCord[0], _this.currentCord[1]);
+        }, function (err) {
+            console.log(err);
+        });
+    };
+    GamePage.prototype.addOtherPlayersMarkers = function () {
+        for (var _i = 0; _i < this.player_location_data.length; _i++) {
+            var player_img = '/assets/img/Doctor-icon.png';
+            if (this.player_location_data[_i].name != this.default_player_name) {
                 var marker = new google.maps.Marker({
                     map: this.map,
                     animation: google.maps.Animation.DROP,
@@ -121,22 +153,9 @@ var GamePage = (function () {
             }
         }
     };
-    //  updatePlayerPosition(){
-    //       this.geolocation.getCurrentPosition().then((position) => {
-    //       this.currentCord[0] = position.coords.latitude;
-    //       this.currentCord[1] = position.coords.longitude;
-    //        }, (err) => {
-    //       console.log(err);
-    //     })
-    //   latitude = parseInt(document.getElementById('latitude').value, 10);
-    //   longtitude = parseInt(document.getElementById('longtitude').value, 10);
-    //   myLatlng = new google.maps.LatLng(latitude, longtitude);
-    //   marker.setPosition(myLatlng);
-    //   map.setCenter(myLatlng);
-    // }
     //Load the map and initialized with a mid value
     GamePage.prototype.loadMap = function () {
-        console.log(this.location);
+        // console.log(this.location);
         //location 6 has to be changed to Mid count of location length
         var latLng = new google.maps.LatLng(this.currentCord[0], this.currentCord[1]);
         var mapOptions = {
@@ -152,26 +171,39 @@ var GamePage = (function () {
         this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
     };
     GamePage.prototype.addMarker = function (lattitue, longitute, alias, color, research_building, cube_info) {
-        //  let location_img = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
-        var location_img = "http://icons.iconarchive.com/icons/paomedia/small-n-flat/64/map-marker-icon.png";
-        var research_centre_img = '/assets/img/office-building-icon.png';
+        var location_img = "/assets/img/map-marker-icon.png";
+        var research_centre_img = "/assets/img/office-building-icon.png";
         var marker = new google.maps.Marker({
             map: this.map,
-            animation: google.maps.Animation.DROP,
+            // animation: google.maps.Animation.DROP,
             position: new google.maps.LatLng(lattitue, longitute),
             icon: location_img
         });
         var _alias = alias;
+        // console.log(Number(Number(lattitue)+50));
         if (research_building) {
-            new google.maps.Marker({
+            var arr = this.modifiedLatLng(lattitue, longitute);
+            marker = new google.maps.Marker({
                 map: this.map,
-                animation: google.maps.Animation.DROP,
-                position: new google.maps.LatLng(lattitue, longitute),
+                // animation: google.maps.Animation.DROP,
+                position: new google.maps.LatLng(arr[0], arr[1]),
                 icon: research_centre_img
             });
+            // this.add_Research_Controller(research_marker,"Research Center");
         }
         this.addDiseaseMarkers(lattitue, longitute, cube_info);
         this.addController(marker, _alias, color, cube_info);
+    };
+    GamePage.prototype.modifiedLatLng = function (lat, lng) {
+        var decPart_lat = (lat + "").split(".");
+        var disease_lat = 0;
+        var decPart_lng = (lng + "").split(".");
+        var disease_lng = 0;
+        this.dieaseMarkerDistance = 300;
+        var coor = [];
+        coor.push(Number(decPart_lat[0] + "." + Number(Number(decPart_lat[1]) + this.dieaseMarkerDistance)));
+        coor.push(Number(decPart_lng[0] + "." + Number(Number(decPart_lng[1]) + this.dieaseMarkerDistance)));
+        return coor;
     };
     GamePage.prototype.fetchMarkers = function () {
         for (var _i = 0; _i < this.edges.length; _i++) {
@@ -211,16 +243,18 @@ var GamePage = (function () {
         flightPath.setMap(this.map);
     };
     GamePage.prototype.addDiseaseMarkers = function (lat, lng, cubeInfo) {
+        // console.log("disease marker");
         var _this = this;
-        console.log("disease marker");
         var decPart_lat = (lat + "").split(".");
         var disease_lat = 0;
         var decPart_lng = (lng + "").split(".");
         var disease_lng = 0;
         var img = "";
-        console.log(cubeInfo);
+        // console.log(cubeInfo);
         cubeInfo.forEach(function (element) {
-            console.log(element.color);
+            if (element.count <= 0) {
+                return;
+            }
             if (element.color == "red") {
                 img = "/assets/img/Map-Marker-Ball-Pink-icon.png";
                 disease_lat = Number(decPart_lat[0] + "." + Number(Number(decPart_lat[1]) + _this.dieaseMarkerDistance));
@@ -232,7 +266,8 @@ var GamePage = (function () {
                 disease_lng = Number(decPart_lng[0] + "." + Number(Number(decPart_lng[1]) - _this.dieaseMarkerDistance));
             }
             else if (element.color == "yellow") {
-                img = '/assets/img/MapMarker_Ball__Black.png';
+                //  img = '/assets/img/MapMarker_Ball__Black.png';
+                img = '/assets/img/MapMarker_Ball_Black2.png';
                 disease_lat = Number(decPart_lat[0] + "." + Number(Number(decPart_lat[1]) - _this.dieaseMarkerDistance));
                 disease_lng = Number(decPart_lng[0] + "." + Number(Number(decPart_lng[1]) + _this.dieaseMarkerDistance));
             }
@@ -241,50 +276,36 @@ var GamePage = (function () {
                 disease_lat = Number(decPart_lat[0] + "." + Number(Number(decPart_lat[1]) - _this.dieaseMarkerDistance));
                 disease_lng = Number(decPart_lng[0] + "." + Number(Number(decPart_lng[1]) - _this.dieaseMarkerDistance));
             }
-            console.log("disease marker2");
+            // console.log("disease marker2");
             // let player_img = 'https://cdn.wikimg.net/strategywiki/images/3/33/Athena_player_sprite.png';
             var marker = new google.maps.Marker({
                 map: _this.map,
                 // animation: google.maps.Animation.DROP,
                 position: new google.maps.LatLng(disease_lat, disease_lng),
-                icon: img
+                icon: img,
+                customInfo: element.color
             });
             var infoWindow = new google.maps.InfoWindow({
                 content: 'cube count: ' + element.count
             });
             google.maps.event.addListener(marker, 'click', function () {
-                infoWindow.open(_this.map, marker);
-                // if(!this.isMove){
-                // this.presentPrompt();
-                // }else {
-                //   this.movePrompt(marker);
-                // }
+                // infoWindow.open(this.map, marker);
+                _this.treatmentPrompt(marker, 'cube count: ' + element.count);
             });
         });
-        // for (var _i = 0; _i < this.player_location_data.length; _i++) {
-        //   let player_img = 'https://cdn.wikimg.net/strategywiki/images/3/33/Athena_player_sprite.png';
-        //   let marker = new google.maps.Marker({
-        //     map: this.map,
-        //     animation: google.maps.Animation.DROP,
-        //     position: new google.maps.LatLng(this.player_location_data[_i].at.latitude,
-        //       this.player_location_data[_i].at.longitude),
-        //     icon: player_img
-        //   });
-        //   this.add_player_informations(marker, this.player_location_data[_i].name);
-        // }
     };
     //Add control and cube informations 
     GamePage.prototype.addController = function (marker, content, color, cube_info) {
         var _this = this;
         //  console.log("cube data : "+ JSON.stringify(cube_info));
         var infoWindow = new google.maps.InfoWindow({
-            content: 'this is : ' + content + '\n' + 'color is : ' + color
+            content: 'Location : ' + content + '\n' + 'Color : ' + color
         });
         google.maps.event.addListener(marker, 'click', function () {
-            console.log("1");
-            infoWindow.open(_this.map, marker);
+            // console.log("1");
+            // infoWindow.open(this.map, marker);
             if (!_this.isMove) {
-                _this.presentPrompt();
+                _this.presentPrompt(marker, 'Location : ' + content, 'Color : ' + color);
             }
             else {
                 _this.movePrompt(marker);
@@ -294,12 +315,12 @@ var GamePage = (function () {
     GamePage.prototype.add_Research_Controller = function (marker, content) {
         var _this = this;
         var infoWindow = new google.maps.InfoWindow({
-            content: 'this is : ' + content
+            content: 'Location : ' + content
         });
         google.maps.event.addListener(marker, 'click', function () {
-            console.log("2");
-            infoWindow.open(_this.map, marker);
-            _this.presentPrompt();
+            // console.log("2");
+            // infoWindow.open(this.map, marker);
+            _this.presentPrompt(marker, 'Location : ' + content, "");
             // 
         });
     };
@@ -309,38 +330,37 @@ var GamePage = (function () {
             content: 'this is : ' + content
         });
         google.maps.event.addListener(marker, 'click', function () {
-            console.log("3");
-            infoWindow.open(_this.map, marker);
-            _this.presentPrompt();
+            // console.log("3");
+            // infoWindow.open(this.map, marker);
+            _this.presentPrompt(marker, 'this is : ' + content, "");
         });
     };
-    GamePage.prototype.presentPrompt = function () {
+    GamePage.prototype.presentPrompt = function (marker, info, message) {
         var _this = this;
         var alert = this.alertCtrl.create({
             title: 'Actions',
-            // let bt_text = "";
-            // if(player_role == ){
-            // }
+            subTitle: info,
+            message: message,
             buttons: [
                 {
                     text: 'Cure',
                     handler: function (data) {
-                        var user_id = "Tom";
-                        _this.cure(user_id, "red", 5);
+                        var user_id = _this.default_player_name;
+                        _this.cure_treat('cure', user_id, marker['customInfo'], 5);
                     }
                 },
-                {
-                    text: 'Move',
-                    handler: function (data) {
-                        var user_id = "Tom";
-                        _this.move(user_id, _this.currentCord);
-                    }
-                },
+                // {
+                //   text: 'Move',
+                //   handler: data => {
+                //     let user_id = this.default_player_name;
+                //     this.move(user_id, this.currentCord);
+                //   }
+                // },
                 {
                     text: 'Build Research Center',
                     handler: function (data) {
-                        var user_id = "Tom";
-                        // this.build_researh_center(user_id, this.currentCord);
+                        var user_id = _this.default_player_name;
+                        _this.build(user_id, _this.currentCord);
                     }
                 },
                 {
@@ -348,7 +368,6 @@ var GamePage = (function () {
                     role: 'cancel',
                     handler: function (data) {
                         _this.isMove = false;
-                        console.log('Cancel');
                     }
                 },
             ]
@@ -359,14 +378,11 @@ var GamePage = (function () {
         var _this = this;
         var alert = this.alertCtrl.create({
             title: 'Move to new place',
-            // let bt_text = "";
-            // if(player_role == ){
-            // }
             buttons: [
                 {
                     text: this.isMove == true ? 'Move Here' : 'Move',
                     handler: function (data) {
-                        var user_id = "1";
+                        var user_id = _this.default_player_name;
                         _this.currentCord[0] = marker.getPosition().lat();
                         _this.currentCord[1] = marker.getPosition().lng();
                         _this.move(user_id, _this.currentCord);
@@ -377,99 +393,110 @@ var GamePage = (function () {
                     role: 'cancel',
                     handler: function (data) {
                         _this.isMove = false;
-                        console.log('Cancel');
                     }
                 },
             ]
         });
         alert.present();
     };
-    GamePage.prototype.cure = function (userId, diseaseType, noofCubes) {
-        // let data:  Map<string, string> = new Map<string, string>();
-        // data.set("user_id",userId);
-        // data.set("disease_type",userId);
-        // data.set("noofCuber",userId);
-        // data.set("userLat",this.currentCord[0].toString());
-        // data.set("userLong",this.currentCord[1].toString());
+    GamePage.prototype.treatmentPrompt = function (marker, info) {
+        var _this = this;
+        var alert = this.alertCtrl.create({
+            title: 'Treat the cure',
+            subTitle: info,
+            buttons: [
+                {
+                    text: 'Cure',
+                    handler: function (data) {
+                        var user_id = _this.default_player_name;
+                        _this.cure_treat("cure", user_id, marker['customInfo'], 1);
+                    }
+                },
+                {
+                    text: 'Treat',
+                    handler: function (data) {
+                        var user_id = _this.default_player_name;
+                        console.log(marker['customInfo']);
+                        _this.cure_treat("treat", user_id, marker['customInfo'], 1);
+                    }
+                },
+                {
+                    text: this.isMove == true ? 'Cancel Move' : 'Cancel',
+                    role: 'cancel',
+                    handler: function (data) {
+                        _this.isMove = false;
+                        // console.log('Cancel');
+                    }
+                },
+            ]
+        });
+        alert.present();
+    };
+    GamePage.prototype.cure_treat = function (type, userId, diseaseType, noofCubes) {
+        var response = this.restApi.post_game_data(this.dataForCureMoveBuild(type, userId, this.currentCord, Game_Constants.DEFAULT_GAME_ID, diseaseType), "/action")
+            .then(function (result) {
+            console.log("result is :" + result);
+        }, function (err) {
+            console.log("error is :" + err);
+        });
+        console.log("response is :" + JSON.stringify(response));
+        this.refresh_game_data();
+    };
+    GamePage.prototype.dataForCureMoveBuild = function (type, user_id, coord, game_id, disease_color) {
         var x = {
-            "type": "treat",
+            "type": type,
             "location": {
-                "x": this.currentCord[0].toString(),
-                "y": this.currentCord[1].toString()
+                "x": coord[0].toString(),
+                "y": coord[1].toString()
             },
-            "player_id": userId,
-            "game_id": 1,
-            "disease": diseaseType
+            "player_id": user_id,
+            "game_id": game_id,
+            "disease": disease_color
         };
-        var response = this.restApi.post_game_data(x, "/action");
-        console.log(response);
-        this.ionViewDidLoad();
-        // data["user_id"] = userId;
-        // data["disease_type"] = diseaseType;
-        // data["noofCuber"] = noofCubes;
-        // data["userLat"] = 15.2231; //userLat;
-        // data["userLong"] = 21.2211;//userLong;
-        // console.log(this.location);
-        // // let latLng : any;
-        //  this.geolocation.getCurrentPosition().then((position) => {
-        //   let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        //   console.log("in coordiantes");
-        //   console.log(position.coords.latitude);
-        //   console.log(position.coords.longitude);
-        //   this.currentCord[0] = position.coords.latitude;
-        //   this.currentCord[1] = position.coords.longitude;
-        //   // let mapOptions = {
-        //   //   center: latLng,
-        //   //   zoom: 15,
-        //   //   mapTypeId: google.maps.MapTypeId.ROADMAP
-        //   // }
-        //   // this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-        // }, (err) => {
-        //   console.log(err);
-        // });
-        // navigator.geolocation.getCurrentPosition(this.getPosition);
-        // console.log("outside");
-        // console.log(this.currentCord[0]);
-        // console.log(this.currentCord[1]);
-        // this.geolocation.getCurrentPosition().then((position) => {
-        //   latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        //   console.log(latLng);
-        // },(err) => {
-        //   console.log(err);
-        // });
+        return x;
     };
     GamePage.prototype.move = function (user_id, locationCords) {
+        var _this = this;
         if (!this.isMove) {
             this.isMove = true;
             this.showToastMessage("select destination");
         }
         else {
-            var x = {
-                "type": "move",
-                "location": {
-                    "x": this.currentCord[0].toString(),
-                    "y": this.currentCord[1].toString()
-                },
-                "player_id": user_id,
-                "game_id": "1",
-                "disease": ""
-            };
-            this.restApi.put_game_data(x, "/action");
+            this.restApi.put_game_data(this.dataForCureMoveBuild("move", user_id, this.currentCord, Game_Constants.DEFAULT_GAME_ID, ""), "/action")
+                .then(function (result) {
+                var response = result['data'];
+                if (response.success) {
+                    _this.showToastMessage("Movement Successful");
+                }
+                else {
+                    _this.showToastMessage("Movement Failed");
+                }
+            }, function (err) {
+                _this.showToastMessage("Error in API or Internet Not working");
+            });
             this.isMove = false;
-            this.ionViewDidLoad();
+            this.refresh_game_data();
         }
     };
-    GamePage.prototype.build = function (building_type) {
+    GamePage.prototype.build = function (user_id, building_type) {
+        var _this = this;
+        this.restApi.post_game_data(this.dataForCureMoveBuild("build_research", user_id, this.currentCord, Game_Constants.DEFAULT_GAME_ID, ""), "/action")
+            .then(function (result) {
+            console.log("build Result" + JSON.stringify(result));
+        }, function (err) {
+            _this.showToastMessage("Error in API or Internet Not working");
+        });
+        this.isMove = false;
+        this.refresh_game_data();
     };
     GamePage.prototype.getPosition = function (position) {
-        var _this = this;
         var cord = [];
         this.currentCord.push(position.coords.latitude);
         this.currentCord.push(position.coords.longitude);
         //  this.currentCord = cord;
         setTimeout(function (handler) {
-            console.log(_this.currentCord[0]);
-            console.log(_this.currentCord[1]);
+            // console.log(this.currentCord[0]);
+            // console.log(this.currentCord[1]);
         }, 300);
     };
     GamePage.prototype.showToastMessage = function (info) {
@@ -501,91 +528,4 @@ GamePage = __decorate([
         LocalstorageProvider])
 ], GamePage);
 export { GamePage };
-// }
-// google maps zoom level
-// minZoom: number = 10;
-// maxZoom: number = 15;
-// // initial center position for the map
-// lat: number = 51.673858;
-// lng: number = 7.815982;
-// clickedMarker(label: string, index: number) {
-//   console.log(`clicked the marker: ${label || index}`)
-// }
-// mapClicked($event: MouseEvent,i:number) {
-//   console.log($event);
-//   console.log(i);
-//   console.log('map clicked');
-//   // this.markers.push({
-//   //   lat: $event.coords.lat,
-//   //   lng: $event.coords.lng,
-//   //   draggable:true
-//   // });
-// }
-// markerDragEnd(m: marker, $event: MouseEvent) {
-//   console.log('dragEnd', m, $event);
-// }
-// markers: marker[] = [
-//   {
-// 	  lat: 51.673858,
-// 	  lng: 7.415982,
-// 	  label: 'A',
-// 	  draggable: true,
-//     iconUrl:"http://icons.iconarchive.com/icons/icons-land/vista-map-markers/64/Map-Marker-Ball-Pink-icon.png"
-//   },
-//   {
-// 	  lat: 51.373858,
-// 	  lng: 7.214382,
-// 	  label: 'B',
-// 	  draggable: false,
-//     iconUrl:"http://icons.iconarchive.com/icons/icons-land/vista-map-markers/64/Map-Marker-Ball-Pink-icon.png"
-//   },
-//   {
-// 	  lat: 51.723858,
-// 	  lng: 7.895982,
-// 	  label: 'C',
-// 	  draggable: true,
-//     iconUrl:"http://icons.iconarchive.com/icons/icons-land/vista-map-markers/64/Map-Marker-Ball-Pink-icon.png"
-//   }
-// ];
-// ionViewDidLoad() {
-//   this.loadMap();
-// }
-// loadMap() {
-//   let latLng = new google.maps.LatLng(-34.9290, 138.6010);
-//   let mapOptions = {
-//     center: latLng,
-//     zoom: 15,
-//     mapTypeId: google.maps.MapTypeId.ROADMAP
-//   }
-//   this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-// }
-//   addMarker() {
-//     let image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
-//     let marker = new google.maps.Marker({
-//       map: this.map,
-//       animation: google.maps.Animation.DROP,
-//       position: this.map.getCenter(),
-//       icon: image
-//     });
-//     let content = "<h4>Information!</h4>";
-//     this.addInfoWindow(marker, content);
-//   }
-//   addInfoWindow(marker, content) {
-//     let infoWindow = new google.maps.InfoWindow({
-//       content: content
-//     });
-//     google.maps.event.addListener(marker, 'click', () => {
-//       infoWindow.open(this.map, marker);
-//     });
-//   }
-// }
-// just an interface for type safety.
-// interface marker {
-// 	lat: number;
-// 	lng: number;
-// 	label?: string;
-// 	draggable: boolean;
-//   iconUrl:string;
-// }
-// }
 //# sourceMappingURL=game.js.map

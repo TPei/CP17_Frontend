@@ -16,31 +16,76 @@ import { DiseasesPage } from '../pages/diseases/diseases';
 import { IndicatorsPage } from '../pages/indicators/indicators';
 import { PlayerPage } from '../pages/player/player';
 import { RestApiProvider } from '../providers/rest-api/rest-api';
-import { Platform, Nav, AlertController } from 'ionic-angular';
+import { PandemicChat } from '../pages/pandemic-chat/pandemic-chat';
+import { Platform, Nav, ModalController } from 'ionic-angular';
+import { LocalstorageProvider } from '../providers/localstorage/localstorage';
+import { Game_Constants } from '../providers/Game_Constants/gameconstants';
+import * as firebase from 'firebase';
 var MyApp = (function () {
-    function MyApp(platform, statusBar, splashScreen, restApiProvider, alertCtrl) {
+    function MyApp(platform, statusBar, splashScreen, restApiProvider, modalCtrl, localStr) {
+        var _this = this;
         this.restApiProvider = restApiProvider;
-        this.alertCtrl = alertCtrl;
+        this.modalCtrl = modalCtrl;
+        this.localStr = localStr;
         this.rootPage = MainMenuPage;
         this.jsonReult = '';
         this.game_id = '';
+        this.user_id = '';
+        this.player_location_data = '';
+        this.Token_Data = '';
+        this.default_player_name = '';
+        var config = {
+            apiKey: Game_Constants.FIREBASE_API_KEY,
+            authDomain: Game_Constants.FIREBASE_AUTH_URL,
+            databaseURL: Game_Constants.FIREBASE_DB_URL,
+            projectId: Game_Constants.FIREBASE_PROJECT_ID,
+            storageBucket: Game_Constants.FIREBASE_STORAGE_BUCKET,
+            messagingSenderId: Game_Constants.FIREBASE_MESSAGE_SENDER_ID
+        };
+        firebase.initializeApp(config);
         platform.ready().then(function () {
             // Okay, so the platform is ready and our plugins are available.
             // Here you can do any higher level native things you might need.
             statusBar.styleDefault();
             splashScreen.hide();
         });
+        if (!Game_Constants.APP_FORCE_START) {
+            this.localStr.get_data(Game_Constants.player_name_string).then(function (val) {
+                _this.default_player_name = val;
+            });
+        }
+        else {
+            this.default_player_name = 'DefaultPlayer';
+        }
         this.game_get_data();
     }
+    MyApp.prototype.initiateChat = function () {
+        this.modalCtrl.create(PandemicChat).present();
+    };
     MyApp.prototype.game_get_data = function () {
         var _this = this;
         this.restApiProvider.get_game_data("1").then(function (result) {
             _this.jsonReult = result;
             _this.game_id = _this.jsonReult.game.game_id;
-            console.log("game id is :" + _this.game_id);
+            _this.player_location_data = _this.jsonReult.game.player;
+            _this.user_id = _this.localStr.get_data(Game_Constants.player_name_string);
+            localStorage['game_id'] = _this.game_id;
+            localStorage['user_id'] = _this.user_id;
+            _this.TokenCount();
         }, function (err) {
-            console.log("data failed 1");
+            // console.log("data failed 1");
         });
+    };
+    MyApp.prototype.TokenCount = function () {
+        for (var _i = 0; _i < this.player_location_data.length; _i++) {
+            if (this.player_location_data[_i].name == this.default_player_name) {
+                for (var _k = 0; _k < this.player_location_data[_i].tokens.disease_tokens.length; _k++) {
+                    this.Token_Data = this.Token_Data + " " + this.player_location_data[_i].tokens.disease_tokens[_k].color + " : "
+                        + this.player_location_data[_i].tokens.disease_tokens[_k].count;
+                    console.log("Coloer : " + this.player_location_data[_i].tokens.disease_tokens[_k].color);
+                }
+            }
+        }
     };
     MyApp.prototype.gotogamerules = function (params) {
         if (!params)
@@ -62,39 +107,6 @@ var MyApp = (function () {
             params = {};
         this.navCtrl.push(PlayerPage, this.jsonReult.game);
     };
-    MyApp.prototype.onClick1 = function (params) {
-        if (!params)
-            params = {};
-        this.popPrompt();
-    };
-    MyApp.prototype.onClick2 = function (params) {
-        if (!params)
-            params = {};
-        this.popPrompt();
-    };
-    MyApp.prototype.onClick3 = function (params) {
-        if (!params)
-            params = {};
-        this.popPrompt();
-    };
-    MyApp.prototype.onClick4 = function (params) {
-        if (!params)
-            params = {};
-        this.popPrompt();
-    };
-    MyApp.prototype.popPrompt = function () {
-        var alert = this.alertCtrl.create({
-            title: 'Actions',
-            buttons: [
-                {
-                    text: 'Cure',
-                    handler: function (data) {
-                    }
-                },
-            ]
-        });
-        alert.present();
-    };
     return MyApp;
 }());
 __decorate([
@@ -105,7 +117,7 @@ MyApp = __decorate([
     Component({
         templateUrl: 'app.html'
     }),
-    __metadata("design:paramtypes", [Platform, StatusBar, SplashScreen, RestApiProvider, AlertController])
+    __metadata("design:paramtypes", [Platform, StatusBar, SplashScreen, RestApiProvider, ModalController, LocalstorageProvider])
 ], MyApp);
 export { MyApp };
 //# sourceMappingURL=app.component.js.map

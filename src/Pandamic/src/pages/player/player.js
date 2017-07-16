@@ -9,16 +9,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { RestApiProvider } from '../../providers/rest-api/rest-api';
 var PlayerPage = (function () {
-    function PlayerPage(navCtrl, navParams) {
+    function PlayerPage(navCtrl, navParams, restApi) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
+        this.restApi = restApi;
         this.player_data = '';
         this.tokens = '';
     }
     PlayerPage.prototype.ionViewDidLoad = function () {
-        this.player_data = this.navParams.get('player');
-        this.tokens = this.player_data.tokens;
+        this.loadData();
+    };
+    PlayerPage.prototype.loadData = function () {
+        var _this = this;
+        this.restApi.get_game_data("1").then(function (result) {
+            var game = result['game'];
+            _this.player_data = _this.navParams.get('player');
+            _this.tokens = _this.player_data.tokens;
+        }, function (err) {
+            console.log("data failed 1");
+        });
     };
     return PlayerPage;
 }());
@@ -27,7 +38,7 @@ PlayerPage = __decorate([
         selector: 'page-player',
         templateUrl: 'player.html'
     }),
-    __metadata("design:paramtypes", [NavController, NavParams])
+    __metadata("design:paramtypes", [NavController, NavParams, RestApiProvider])
 ], PlayerPage);
 export { PlayerPage };
 //# sourceMappingURL=player.js.map

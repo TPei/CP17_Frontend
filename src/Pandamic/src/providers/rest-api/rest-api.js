@@ -11,62 +11,55 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-/*
-  Generated class for the RestApiProvider provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular DI.
-*/
-// let apiUrl = 'assets/dummy.json';
-// let apiUrl = 'https://mysterious-sands-48154.herokuapp.com';
-var apiUrl = 'http://sample-env.mucpcmwpvj.eu-central-1.elasticbeanstalk.com';
+// import {plainToClass} from "class-transformer";
+import { Game_Constants } from '../../providers/Game_Constants/gameconstants';
 var RestApiProvider = (function () {
     function RestApiProvider(http) {
         this.http = http;
-        this.get_game_data("1");
+        this.Game_Data = '';
+        this.get_game_data(Game_Constants.DEFAULT_GAME_ID);
     }
     RestApiProvider.prototype.get_game_data = function (game_id) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            _this.http.get(apiUrl + "/game?id=" + game_id)
+            _this.http.get(Game_Constants.API_URL + "/game?id=" + game_id)
                 .subscribe(function (res) {
                 resolve(res.json());
+                // this.Game_Data = plainToClass(RootObject,res.json());
             }, function (err) {
-                reject(err);
             }, function () {
                 console.log("catch");
             });
         });
     };
     RestApiProvider.prototype.post_game_data = function (input_data, post_location) {
-        // input = input_data.json();
-        var _this = this;
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, resolve(res.json())));
+        {
             var headers = new Headers();
             headers.append('Content-Type', 'application/json');
-            _this.http.post(apiUrl + "/game" + post_location, input_data)
+            this.http.post(Game_Constants.API_URL + "/game" + post_location, input_data)
                 .subscribe(function (res) {
                 resolve(res.json());
             }, function (err) {
-                reject(err);
+                resolve(res.json());
             }, function () {
                 console.log("catch");
             });
-        });
+        }
+        ;
     };
     RestApiProvider.prototype.put_game_data = function (input_data, post_location) {
-        // input = input_data.json();
         var _this = this;
         return new Promise(function (resolve, reject) {
             var headers = new Headers();
             headers.append('Content-Type', 'application/json');
-            _this.http.put(apiUrl + "/game" + post_location, input_data)
+            console.log('in post');
+            console.log(input_data);
+            _this.http.put(Game_Constants.API_URL + "/game" + post_location, headers, input_data)
                 .subscribe(function (res) {
                 resolve(res.json());
             }, function (err) {
-                reject(err);
-            }, function () {
-                console.log("catch");
+                console.log("err" + err);
             });
         });
     };
@@ -75,14 +68,11 @@ var RestApiProvider = (function () {
         return new Promise(function (resolve, reject) {
             var headers = new Headers();
             headers.append('Content-Type', 'application/json');
-            _this.http.post(apiUrl + "/game/player", input_data)
+            _this.http.post(Game_Constants.API_URL + "/game/player", headers, input_data)
                 .subscribe(function (res) {
                 resolve(res.json());
             }, function (err) {
-                reject(err);
                 console.log("err" + err);
-            }, function () {
-                console.log("catch on post player");
             });
         });
     };
@@ -93,4 +83,10 @@ RestApiProvider = __decorate([
     __metadata("design:paramtypes", [Http])
 ], RestApiProvider);
 export { RestApiProvider };
+var RootObject = (function () {
+    function RootObject() {
+    }
+    return RootObject;
+}());
+export { RootObject };
 //# sourceMappingURL=rest-api.js.map
